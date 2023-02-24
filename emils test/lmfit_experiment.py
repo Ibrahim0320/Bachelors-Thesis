@@ -1,6 +1,7 @@
 import lmfit
 import numpy as np
 import matplotlib.pyplot as plt
+import corner
 
 def res(params, x, data, uncertainty):
     a = params['a']
@@ -29,11 +30,16 @@ out = lmfit.minimize( res, par, args=(x,data, uncertainty) )
 abest = out.params['a']
 bbest = out.params['b']
 
-print(out.params)
+print(lmfit.fit_report(out))
 
 # plt.plot(x,y, '-')
-plt.plot(x,data,'+')
-plt.plot(x, abest*x+bbest)
-plt.legend(['Data', f'Chisq: {out.redchi}'])
-plt.grid(True)
+# plt.plot(x,data,'+')
+# plt.plot(x, abest*x+bbest)
+# plt.legend(['Data', f'Chisq: {out.redchi}'])
+# plt.grid(True)
+# plt.show()
+
+bay = lmfit.minimize(res, args=(x,data, uncertainty), method='emcee', nan_policy='omit', burn=300, steps=1000, thin=20,params=out.params, is_weighted=True, progress=True)
+emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names,levels = (0.68,), truths=list(bay.params.valuesdict().values()))
+
 plt.show()
