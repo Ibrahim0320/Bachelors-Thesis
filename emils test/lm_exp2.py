@@ -10,14 +10,14 @@ def res(params):
     a = params['a']
     b = params['b']
 
-    model = 0.5*a**2+0.5*b**2
+    model = a*x+b
 
     return (data-model)/uncertainty
 
 par = lmfit.Parameters()
 par.add_many(('a',1), ('b',1))
 
-out = lmfit.minimize(res, par, method='nelder', nan_policy='omit')
+out = lmfit.minimize(res, par, method='leastsq', nan_policy='omit')
 print(lmfit.fit_report(out))
 
 bay = lmfit.minimize(res, method='emcee', nan_policy='omit', burn=300, steps=1000, thin=20,params=out.params, is_weighted=True, progress=True)
