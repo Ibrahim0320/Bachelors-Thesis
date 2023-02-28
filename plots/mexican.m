@@ -1,12 +1,20 @@
-f = @(x) -1/2*(x.^2) + 1/4*0.05*x.^4;
+f = @(r) -1/2*(r.^2) + 1/4*0.05*r.^4;
 
-lim=8
+th = linspace(0,2*pi);
+r = linspace(0,5.5);
 
-x = linspace(-lim,lim);
-hold on
-plot(x, f(x), 'r', LineWidth=1)
-grid on
-set(gca, 'xtick', [])
-set(gca, 'ytick', [])
-xlabel('\phi')
-ylabel('V(\phi)')
+[R,T] = meshgrid(r,th);
+
+z = f(R);
+
+[x,y] = pol2cart(T,R);
+
+s = surf(x,y,z, 'FaceAlpha',0.5, 'FaceLighting','gouraud');
+s.EdgeAlpha = 0.5;
+
+xlabel('Re(\phi)', 'FontSize',14);
+ylabel('Im(\phi)','FontSize',14);
+zlabel('V(\phi)','FontSize',14);
+set(gca,'xtick',[])
+set(gca,'ytick',[])
+set(gca,'ztick',[]) 

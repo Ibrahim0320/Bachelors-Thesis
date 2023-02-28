@@ -10,7 +10,7 @@ def res(params):
     a = params['a']
     b = params['b']
 
-    model = a*x+b
+    model = a**2+b**2
 
     return (data-model)/uncertainty
 

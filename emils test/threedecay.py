@@ -19,13 +19,13 @@ unc_bb = [1.1,1.9]
 def residue(params):
     k_f = params['k_f']
     k_v = params['k_v']
-    # BR_inv = params['BR_inv']
+    BR_inv = params['BR_inv']
 
-    BR_inv = 0
+    # BR_inv = 0
 
-    mu_model_ww = (k_f * k_v * (1-BR_inv))/((BR_sm_WW + BR_sm_ZZ)*k_v + BR_sm_bb*k_f)
-    mu_model_zz = (k_f * k_v * (1-BR_inv))/((BR_sm_WW + BR_sm_ZZ)*k_v + BR_sm_bb*k_f)
-    mu_model_bb = (k_f * k_f * (1-BR_inv))/((BR_sm_WW + BR_sm_ZZ)*k_v + BR_sm_bb*k_f)
+    mu_model_ww = (k_f**2 * k_v**2 * (1-BR_inv))/((BR_sm_WW + BR_sm_ZZ)*k_v**2 + BR_sm_bb*k_f**2)
+    mu_model_zz = (k_f**2 * k_v**2 * (1-BR_inv))/((BR_sm_WW + BR_sm_ZZ)*k_v**2 + BR_sm_bb*k_f**2)
+    mu_model_bb = (k_f**2 * k_f**2 * (1-BR_inv))/((BR_sm_WW + BR_sm_ZZ)*k_v**2 + BR_sm_bb*k_f**2)
     
     res_ww = (mu_model_ww - mu_ww)/unc_ww
     res_zz = (mu_model_zz - mu_zz)/unc_zz
@@ -37,7 +37,7 @@ def residue(params):
 par = lmfit.Parameters()
 par.add('k_f',1, min = -5, max = 5)
 par.add('k_v',1, min = -5, max = 5)
-# par.add('BR_inv', 0, min = 0, max = 1, vary=True)
+par.add('BR_inv', 0, min = 0, max = 1)
 
 out = lmfit.minimize(residue, par,method = 'nelder')
 
@@ -46,6 +46,6 @@ lmfit.report_fit(out)
 
 # Corner plot
 print("Sampling the posterior...")
-bay = lmfit.minimize(residue, method='emcee', burn=300, steps=5000, thin=20, params=out.params, is_weighted=False, progress=True)
+bay = lmfit.minimize(residue, method='emcee', burn=300, steps=2000, thin=30, params=out.params, is_weighted=False, progress=True)
 emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names,truths=list(bay.params.valuesdict().values()), levels = (0.69,))
 plt.show()
