@@ -69,7 +69,7 @@ lmfit.report_fit(result)
 # lmfit.printfuncs.report_ci(ci)
 
 #Corner plot
-plot_grej = lmfit.minimize(residue, method='emcee', nan_policy='omit', burn=100, steps=10000, thin=50, params=result.params, is_weighted=True, progress=True)
-emcee_plot = corner.corner(plot_grej.flatchain, labels=plot_grej.var_names)#, truths=list(plot_grej.params.valuesdict().values()))
+plot_grej = lmfit.minimize(residue, method='emcee', nan_policy='omit',float_behavior = 'chi2', burn=100, steps=2000, thin=50, params=result.params, is_weighted=True, progress=True)
+emcee_plot = corner.corner(plot_grej.flatchain, labels=plot_grej.var_names,levels = (0.69,))#, truths=list(plot_grej.params.valuesdict().values()))
 
 plt.show()

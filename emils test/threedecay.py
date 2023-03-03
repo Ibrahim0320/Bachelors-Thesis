@@ -46,6 +46,6 @@ lmfit.report_fit(out)
 
 # Corner plot
 print("Sampling the posterior...")
-bay = lmfit.minimize(residue, method='emcee', burn=300, steps=2000, thin=30, params=out.params, is_weighted=False, progress=True)
-emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names,truths=list(bay.params.valuesdict().values()), levels = (0.69,))
+bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=300, steps=2000, thin=30, params=out.params, is_weighted=True, progress=True)
+emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names,truths=list(out.params.valuesdict().values()), levels = (0.69,))
 plt.show()
