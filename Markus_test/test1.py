@@ -61,7 +61,7 @@ par.add('BR_inv', 0, min = 0, max = 1) #Den ska vara med, har inte stelkoll på 
 #Antaganden i datan
 #kappa för alla bosoner samma, alla fermioner har samma kapppa också
 
-#Minimizer objekt
+# Minimizer objekt
 out = lmfit.Minimizer(residue, par)
 result = out.minimize( method = 'nelder')
 
@@ -80,7 +80,7 @@ lmfit.report_fit(result)
 
 #print(result.params.values())
 
-plot_grej = lmfit.minimize(residue, params=result.params, method='emcee', nan_policy='omit', burn=100, steps=10000, thin=50, float_behavior='chi2', is_weighted=True, progress=True)
+plot_grej = lmfit.minimize(residue, params=result.params, method='emcee', nan_policy='omit', burn=300, steps=30000, thin=100, float_behavior='chi2', is_weighted=True, progress=True)
 emcee_plot = corner.corner(plot_grej.flatchain, labels=result.var_names, levels=(0.69,))#, truths=list(plot_grej.params.values()))
 
 plt.show()
