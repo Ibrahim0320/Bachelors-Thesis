@@ -1,5 +1,12 @@
 import openpyxl
 import pandas
+import numbers
+
+def cellval(cell):
+    if isinstance(cell.value, numbers.Number):
+        return cell.value
+    else:
+        return None
 
 fname = "HiggsData.xlsx"
 diff = 12
@@ -14,10 +21,12 @@ sh78 = book[shname]
 cols = ['ggF','VBF','VH','ttH']
 rows = ['bb','cc','tt','mumu','gamgam','gg','WW','ZZ','Zgam']
 
-mu_atlas = sh78['B2:E10']
+mu_atlas_78 = pandas.DataFrame(sh78['B2:E10'],index=rows, columns=cols).applymap(cellval)
+unc_atlas_78 = pandas.DataFrame(sh78[f'B{2+diff}:E{10+diff}'],index=rows, columns=cols).applymap(cellval)
+mu_cms_78 = pandas.DataFrame(sh78[f'B{2+2*diff}:E{10+2*diff}'],index=rows, columns=cols).applymap(cellval)
+unc_cms_78 = pandas.DataFrame(sh78[f'B{2+3*diff}:E{10+3*diff}'],index=rows, columns=cols).applymap(cellval)
 
-df = pandas.DataFrame(mu_atlas,index=rows, columns=cols)
-print(df['VBF']['bb'].value)
+print(unc_cms_78)
 
 # mu_ggF_bb = [sh78[f'B2'].value, sh78[f'B{2+2*diff}'].value]
 # unc_ggF_bb = [sh78[f'B{2+diff}'].value, sh78[f'B{2+3*diff}'].value]
