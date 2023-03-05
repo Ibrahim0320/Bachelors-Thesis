@@ -1,74 +1,74 @@
 import openpyxl
 import pandas
 import numbers
+import numpy as np
+from bcolors import bcolors
+
+print(f"{bcolors.WARNING}Welcome to data.py{bcolors.ENDC}")
 
 def cellval(cell):
     if isinstance(cell.value, numbers.Number):
         return cell.value
-    else:
+    elif isinstance(cell.value, str) and cell.value.startswith("="):
+        return eval(cell.value[1:])
+    elif type(cell.value) == type(None):
         return None
+    else:
+        raise TypeError(f"Expected number or addition expression, got '{cell.value}' in {cell}")
 
 fname = "HiggsData.xlsx"
 diff = 12
+cols = ['ggF','VBF','VH','ttH']
+rows = ['bb','cc','tt','mumu','gamgam','gg','WW','ZZ','Zgam']
+
 print(f"Attempting to read {fname}...")
 book = openpyxl.load_workbook(fname)
 
 ### 7+8 TeV
-shname = '7och8 TeV'
-print(f"Loading data for {shname}")
-sh78 = book[shname]
+shname = '7 and 8 TeV'
+print(f"Loading data for {shname}...")
+sheet = book[shname]
 
-cols = ['ggF','VBF','VH','ttH']
-rows = ['bb','cc','tt','mumu','gamgam','gg','WW','ZZ','Zgam']
+mu_atlas_78 = pandas.DataFrame(sheet['B2:E10'],index=rows, columns=cols).applymap(cellval)
+unc_atlas_78 = pandas.DataFrame(sheet[f'B{2+diff}:E{10+diff}'],index=rows, columns=cols).applymap(cellval)
+mu_cms_78 = pandas.DataFrame(sheet[f'B{2+2*diff}:E{10+2*diff}'],index=rows, columns=cols).applymap(cellval)
+unc_cms_78 = pandas.DataFrame(sheet[f'B{2+3*diff}:E{10+3*diff}'],index=rows, columns=cols).applymap(cellval)
 
-mu_atlas_78 = pandas.DataFrame(sh78['B2:E10'],index=rows, columns=cols).applymap(cellval)
-unc_atlas_78 = pandas.DataFrame(sh78[f'B{2+diff}:E{10+diff}'],index=rows, columns=cols).applymap(cellval)
-mu_cms_78 = pandas.DataFrame(sh78[f'B{2+2*diff}:E{10+2*diff}'],index=rows, columns=cols).applymap(cellval)
-unc_cms_78 = pandas.DataFrame(sh78[f'B{2+3*diff}:E{10+3*diff}'],index=rows, columns=cols).applymap(cellval)
+shname = '13 TeV'
+print(f"Loading data for {shname}...")
+sheet = book[shname]
 
-print(unc_cms_78)
+mu_atlas_13 = pandas.DataFrame(sheet['B2:E10'],index=rows, columns=cols).applymap(cellval)
+unc_atlas_13 = pandas.DataFrame(sheet[f'B{2+diff}:E{10+diff}'],index=rows, columns=cols).applymap(cellval)
+mu_cms_13 = pandas.DataFrame(sheet[f'B{2+2*diff}:E{10+2*diff}'],index=rows, columns=cols).applymap(cellval)
+unc_cms_13 = pandas.DataFrame(sheet[f'B{2+3*diff}:E{10+3*diff}'],index=rows, columns=cols).applymap(cellval)
 
-# mu_ggF_bb = [sh78[f'B2'].value, sh78[f'B{2+2*diff}'].value]
-# unc_ggF_bb = [sh78[f'B{2+diff}'].value, sh78[f'B{2+3*diff}'].value]
-mu_VBF_bb = [sh78[f'C2'].value]
-unc_VBF_bb = [sh78[f'C{2+diff}'].value]
-mu_VH_bb = [sh78[f'D2'].value, sh78[f'D{2+2*diff}'].value]
-unc_VH_bb = [sh78[f'D{2+diff}'].value, sh78[f'D{2+3*diff}'].value]
-mu_ttH_bb = [sh78[f'E2'].value, sh78[f'E{2+2*diff}'].value]
-unc_ttH_bb = [sh78[f'E{2+diff}'].value, sh78[f'E{2+3*diff}'].value]
+m_78 = pandas.DataFrame(((mu_atlas_78, unc_atlas_78),(mu_cms_78, unc_cms_78)), index=['atlas', 'cms'], columns=['mu','unc'])
+m_13 = pandas.DataFrame(((mu_atlas_13, unc_atlas_13),(mu_cms_13, unc_cms_13)), index=['atlas', 'cms'], columns=['mu','unc'])
 
-mu_ggF_tt = [sh78[f'B4'].value, sh78[f'B{4+2*diff}'].value]
-unc_ggF_tt = [sh78[f'B{4+diff}'].value, sh78[f'B{4+3*diff}'].value]
-mu_VBF_tt = [sh78[f'C4'].value, sh78[f'C{4+2*diff}'].value]
-unc_VBF_tt = [sh78[f'C{4+diff}'].value, sh78[f'C{4+3*diff}'].value]
-mu_VH_tt = [sh78[f'D4'].value, sh78[f'D{4+2*diff}'].value]
-unc_VH_tt = [sh78[f'D{4+diff}'].value, sh78[f'D{4+3*diff}'].value]
-mu_ttH_tt = [sh78[f'E4'].value, sh78[f'E{4+2*diff}'].value]
-unc_ttH_tt = [sh78[f'E{4+diff}'].value, sh78[f'E{4+3*diff}'].value]
+print("Succesfully loaded signal strengths! :)")
+print("Now loading branching ratios...")
+sheet = book['Branching Ratios']
+br = pandas.DataFrame(sheet['C2:C10'], index=rows).applymap(cellval).to_dict()[0]
 
-mu_ggF_gg = [sh78[f'B6'].value, sh78[f'B{6+2*diff}'].value]
-unc_ggF_gg = [sh78[f'B{6+diff}'].value, sh78[f'B{6+3*diff}'].value]
-mu_VBF_gg = [sh78[f'C6'].value, sh78[f'C{6+2*diff}'].value]
-unc_VBF_gg = [sh78[f'C{6+diff}'].value, sh78[f'C{6+3*diff}'].value]
-mu_VH_gg = [sh78[f'D6'].value, sh78[f'D{6+2*diff}'].value]
-unc_VH_gg = [sh78[f'D{6+diff}'].value, sh78[f'D{6+3*diff}'].value]
-mu_ttH_gg = [sh78[f'E6'].value, sh78[f'E{6+2*diff}'].value]
-unc_ttH_gg = [sh78[f'E{6+diff}'].value, sh78[f'E{6+3*diff}'].value]
+print(f"{bcolors.OKGREEN}Loaded all data!!!{bcolors.ENDC}")
 
-mu_ggF_ww = [sh78[f'B8'].value]
-unc_ggF_ww = [sh78[f'B{8+diff}'].value]
-mu_VBF_ww = [sh78[f'C8'].value, sh78[f'C{8+2*diff}'].value]
-unc_VBF_ww = [sh78[f'C{6+diff}'].value, sh78[f'C{6+3*diff}'].value]
-mu_VH_ww = [sh78[f'D8'].value, sh78[f'D{8+2*diff}'].value]
-unc_VH_ww = [sh78[f'D{6+diff}'].value, sh78[f'D{6+3*diff}'].value]
-mu_ttH_ww = [sh78[f'E8'].value]
-unc_ttH_ww = [sh78[f'E{8+diff}'].value]
 
-mu_ggF_zz = [sh78[f'B9'].value, sh78[f'B{9+2*diff}'].value]
-unc_ggF_zz = [sh78[f'B{9+diff}'].value, sh78[f'B{9+3*diff}'].value]
-mu_VBF_zz = [sh78[f'C9'].value, sh78[f'C{9+2*diff}'].value]
-unc_VBF_zz = [sh78[f'C{9+diff}'].value, sh78[f'C{9+3*diff}'].value]
-mu_VH_zz = [sh78[f'D{9+2*diff}'].value]
-unc_VH_zz = [sh78[f'D{9+3*diff}'].value]
-mu_ttH_zz = [sh78[f'E9'].value, sh78[f'E{9+2*diff}'].value]
-unc_ttH_zz = [sh78[f'E{9+diff}'].value, sh78[f'E{9+3*diff}'].value]
+def hd(data_type, prodmode, finalmode, energy=''):
+    """
+    hd creates arrays of LHC data
+
+    :param data_type: 'mu' (averages) or 'unc' (uncertainties)
+    :param prodmode: production mode in LHC
+    :param finalmode: final decay mode in LHC
+    :param energy: 78 (7 and 8 TeV) or 13 (13 TeV). Returns both energies if left empty
+    :return: Returns an array
+    """
+
+    ret = []
+    if energy != '13':
+        [ret.append(mat[prodmode][finalmode]) for mat in m_78[data_type] if not np.isnan(mat[prodmode][finalmode])]
+    if energy != '78':
+        [ret.append(mat[prodmode][finalmode]) for mat in m_13[data_type] if not np.isnan(mat[prodmode][finalmode])]
+        
+    return ret
