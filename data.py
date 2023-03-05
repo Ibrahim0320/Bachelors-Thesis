@@ -1,4 +1,5 @@
 import openpyxl
+import pandas
 
 fname = "HiggsData.xlsx"
 diff = 12
@@ -9,6 +10,15 @@ book = openpyxl.load_workbook(fname)
 shname = '7och8 TeV'
 print(f"Loading data for {shname}")
 sh78 = book[shname]
+
+cols = ['ggF','VBF','VH','ttH']
+rows = ['bb','cc','tt','mumu','gamgam','gg','WW','ZZ','Zgam']
+
+mu_atlas = sh78['B2:E10']
+
+df = pandas.DataFrame(mu_atlas,index=rows, columns=cols)
+print(df['VBF']['bb'].value)
+
 # mu_ggF_bb = [sh78[f'B2'].value, sh78[f'B{2+2*diff}'].value]
 # unc_ggF_bb = [sh78[f'B{2+diff}'].value, sh78[f'B{2+3*diff}'].value]
 mu_VBF_bb = [sh78[f'C2'].value]
