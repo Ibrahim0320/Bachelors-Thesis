@@ -34,10 +34,15 @@ def residue(params):
 
     sum_over_f =  ( k_f ** 2 * BR_sm_bb + k_b ** 2 * ( BR_sm_WW + BR_sm_ZZ) + k_g ** 2 *BR_sm_gg + k_t ** 2 * BR_sm_tt)
 
-    model_f = (k_f ** 2 * k_i ** 2 * (1 - BR_inv)) / sum_over_f
-    model_b = (k_b ** 2 * k_i ** 2 * (1 - BR_inv)) / sum_over_f
-    model_g = (k_g ** 2 * k_i ** 2 * (1 - BR_inv)) / sum_over_f
-    model_t = (k_t ** 2 * k_i ** 2 * (1 - BR_inv)) / sum_over_f
+    # model_f = (k_f ** 2 * k_i ** 2 * (1 - BR_inv)) / sum_over_f
+    # model_b = (k_b ** 2 * k_i ** 2 * (1 - BR_inv)) / sum_over_f
+    # model_g = (k_g ** 2 * k_i ** 2 * (1 - BR_inv)) / sum_over_f
+    # model_t = (k_t ** 2 * k_i ** 2 * (1 - BR_inv)) / sum_over_f
+
+    model_f = model_mu(k_f, k_i, BR_inv)/sum_over_f
+    model_b = model_mu(k_b, k_i, BR_inv)/sum_over_f
+    model_g = model_mu(k_g, k_i, BR_inv)/sum_over_f
+    model_t = model_mu(k_t, k_i, BR_inv)/sum_over_f
 
     res_ww = (mu_ww - model_b)/unc_ww
     res_zz = (mu_zz - model_b)/unc_zz
@@ -46,6 +51,10 @@ def residue(params):
     res_tt = (mu_tt - model_t)/unc_tt
 
     return np.hstack((res_ww, res_zz, res_bb, res_gg, res_tt))
+
+def model_mu(k_f,k_i,BR_inv):
+    return (k_f ** 2 * k_i ** 2 * (1 - BR_inv))
+    
 
 #Skapa parametrar och initiella värden
 par = lmfit.Parameters()
@@ -80,7 +89,7 @@ lmfit.report_fit(result)
 
 #print(result.params.values())
 
-plot_grej = lmfit.minimize(residue, params=result.params, method='emcee', nan_policy='omit', burn=300, steps=30000, thin=100, float_behavior='chi2', is_weighted=True, progress=True)
+plot_grej = lmfit.minimize(residue, params=result.params, method='emcee', nan_policy='omit', burn=300, steps=5000, thin=100, float_behavior='chi2', is_weighted=True, progress=True)
 emcee_plot = corner.corner(plot_grej.flatchain, labels=result.var_names, levels=(0.69,))#, truths=list(plot_grej.params.values()))
 
 plt.show()
