@@ -72,7 +72,7 @@ def residue_ggF(params):
     # res_gg = (hd('mu','ggF','gg') - mu_model_gg)/hd('unc','ggF','gg')
     
 
-    return np.hstack((res_WW_78, res_ZZ_78, res_bb_78, res_cc_78, res_mumu_78, res_tau_78, res_gamgam_78,res_WW_13, res_ZZ_13, res_bb_13, res_cc_13, res_mumu_13, res_tau_13, res_gamgam_13))
+    return np.hstack((res_WW_78, res_ZZ_78, res_bb_78, res_mumu_78, res_tau_78, res_gamgam_78,res_WW_13, res_ZZ_13, res_bb_13, res_mumu_13, res_tau_13, res_gamgam_13))
 
 def residue_VBF(params):
     k_w = params['k_w']
@@ -133,7 +133,7 @@ def residue_VBF(params):
     res_tau_13 = (hd('mu','VBF','tt','13') - mu_model_tau_13)/hd('unc','VBF','tt','13')
     res_gamgam_13 = (hd('mu','VBF','gamgam','13') - mu_model_gamgam_13)/hd('unc','VBF','gamgam','13')
 
-    return np.hstack((res_WW_78, res_ZZ_78, res_bb_78, res_cc_78, res_mumu_78, res_tau_78, res_gamgam_78, res_WW_13, res_ZZ_13, res_bb_13, res_cc_13, res_mumu_13, res_tau_13, res_gamgam_13))
+    return np.hstack((res_WW_78, res_ZZ_78, res_bb_78, res_mumu_78, res_tau_78, res_gamgam_78, res_WW_13, res_ZZ_13, res_bb_13, res_mumu_13, res_tau_13, res_gamgam_13))
 
 def residue_ttH(params):
     k_w = params['k_w']
@@ -176,7 +176,7 @@ def residue_ttH(params):
     # res_gg = (hd('mu','ttH','gg') - mu_model_gg)/hd('unc','ttH','gg')
     
 
-    return np.hstack((res_WW, res_ZZ, res_bb, res_cc, res_mumu, res_tau, res_gamgam))
+    return np.hstack((res_WW, res_ZZ, res_bb, res_mumu, res_tau, res_gamgam))
 
 def residue_VH(params):
     k_w = params['k_w']
@@ -220,7 +220,7 @@ def residue_VH(params):
     res_gamgam = (hd('mu','VH','gamgam') - mu_model_gamgam)/hd('unc','VH','gamgam')
     # res_gg = (hd('mu','VH','gg') - mu_model_gg)/hd('unc','VH','gg')
 
-    return np.hstack((res_WW, res_ZZ, res_bb, res_cc, res_mumu, res_tau, res_gamgam))
+    return np.hstack((res_WW, res_ZZ, res_bb, res_mumu, res_tau, res_gamgam))
 
 # Skapa parametrar
 par = lmfit.Parameters()
@@ -262,6 +262,6 @@ lmfit.report_fit(out)
 
 print(f"PID: {os.getpid()}")
 print("Sampling the posterior...")
-bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=300, steps=1000, thin=30, params=out.params, is_weighted=True, progress=True)
+bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=300, steps=5000, thin=30, params=out.params, is_weighted=True, progress=True)
 emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values()))
 plt.show()
