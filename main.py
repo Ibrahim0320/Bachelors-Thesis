@@ -22,7 +22,7 @@ def residue_ggF(params):
     k_mu = params['k_mu']
     k_tau = params['k_tau']
     # k_gg = params['k_gg']
-    # k_gamgam = params['k_gamgam']
+    k_gamgam = params['k_gamgam']
     #k_zgam = params['k_zgam']
     BR_inv = params['BR_inv']
 
@@ -32,8 +32,7 @@ def residue_ggF(params):
                   + k_t**2 * br['cc'] 
                   + k_mu**2 * br['mumu'] 
                   + k_tau**2 * br['tt'] 
-                #   + k_gg**2 * br['gg'] 
-                #   + k_gamgam**2 * br['gamgam']
+                  + (1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * br['gamgam']
     )
     
     mu_model_WW_78 = (k_z**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
@@ -42,9 +41,8 @@ def residue_ggF(params):
     mu_model_cc_78 = (k_t**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
     mu_model_mumu_78 = (k_mu**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
     mu_model_tau_78 = (k_tau**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
-    mu_model_gamgam_78 = ((1.59*k_w**2 + 0.07*k_t**2 - 0.66*k_t*k_w) * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
+    mu_model_gamgam_78 = ((1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
     # mu_model_gg = (k_gg**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
-    # mu_model_gamgam = (k_gamgam**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
 
     mu_model_WW_13 = (k_z**2 * (1.04*k_t**2 + 0.002*k_b**2 - 0.04*k_t*k_b) * (1 - BR_inv)) / sum_over_f
     mu_model_ZZ_13 = (k_w**2 * (1.04*k_t**2 + 0.002*k_b**2 - 0.04*k_t*k_b) * (1 - BR_inv)) / sum_over_f
@@ -52,7 +50,7 @@ def residue_ggF(params):
     mu_model_cc_13 = (k_t**2 * (1.04*k_t**2 + 0.002*k_b**2 - 0.04*k_t*k_b) * (1 - BR_inv)) / sum_over_f
     mu_model_mumu_13 = (k_mu**2 * (1.04*k_t**2 + 0.002*k_b**2 - 0.04*k_t*k_b) * (1 - BR_inv)) / sum_over_f
     mu_model_tau_13 = (k_tau**2 * (1.04*k_t**2 + 0.002*k_b**2 - 0.04*k_t*k_b) * (1 - BR_inv)) / sum_over_f
-    mu_model_gamgam_13 = ((1.59*k_w**2 + 0.07*k_t**2 - 0.66*k_t*k_w) * (1.04*k_t**2 + 0.002*k_b**2 - 0.04*k_t*k_b) * (1 - BR_inv)) / sum_over_f
+    mu_model_gamgam_13 = ((1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * (1.04*k_t**2 + 0.002*k_b**2 - 0.04*k_t*k_b) * (1 - BR_inv)) / sum_over_f
 
     res_WW_78 = (hd('mu','ggF','WW','78') - mu_model_WW_78)/hd('unc','ggF','WW','78')
     res_ZZ_78 = (hd('mu','ggF','ZZ','78') - mu_model_ZZ_78)/hd('unc','ggF','ZZ','78')
@@ -82,7 +80,7 @@ def residue_VBF(params):
     k_mu = params['k_mu']
     k_tau = params['k_tau']
     # k_gg = params['k_gg']
-    # k_gamgam = params['k_gamgam']
+    k_gamgam = params['k_gamgam']
     #k_zgam = params['k_zgam']
     BR_inv = params['BR_inv']
 
@@ -92,8 +90,7 @@ def residue_VBF(params):
                   + k_t**2 * br['cc'] 
                   + k_mu**2 * br['mumu'] 
                   + k_tau**2 * br['tt'] 
-                #   + k_gg**2 * br['gg'] 
-                #   + k_gamgam**2 * br['gamgam']
+                  + (1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * br['gamgam']
     )
     
     mu_model_WW_78 = (k_z**2 * (0.74*k_w**2 + 0.74*k_z**2) * (1 - BR_inv)) / sum_over_f
@@ -102,7 +99,7 @@ def residue_VBF(params):
     mu_model_cc_78 = (k_t**2 * (0.74*k_w**2 + 0.74*k_z**2) * (1 - BR_inv)) / sum_over_f
     mu_model_mumu_78 = (k_mu**2 * (0.74*k_w**2 + 0.74*k_z**2) * (1 - BR_inv)) / sum_over_f
     mu_model_tau_78 = (k_tau**2 * (0.74*k_w**2 + 0.74*k_z**2) * (1 - BR_inv)) / sum_over_f
-    mu_model_gamgam_78 = ((1.59*k_w**2 + 0.07*k_t**2 - 0.66*k_t*k_w) * (0.74*k_w**2 + 0.74*k_z**2) * (1 - BR_inv)) / sum_over_f
+    mu_model_gamgam_78 = ((1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * (0.74*k_w**2 + 0.74*k_z**2) * (1 - BR_inv)) / sum_over_f
 
     mu_model_WW_13 = (k_z**2 * (0.73*k_w**2 + 0.27*k_z**2) * (1 - BR_inv)) / sum_over_f
     mu_model_ZZ_13 = (k_w**2 * (0.73*k_w**2 + 0.27*k_z**2) * (1 - BR_inv)) / sum_over_f
@@ -110,7 +107,7 @@ def residue_VBF(params):
     mu_model_cc_13 = (k_t**2 * (0.73*k_w**2 + 0.27*k_z**2) * (1 - BR_inv)) / sum_over_f
     mu_model_mumu_13 = (k_mu**2 * (0.73*k_w**2 + 0.27*k_z**2) * (1 - BR_inv)) / sum_over_f
     mu_model_tau_13 = (k_tau**2 * (0.73*k_w**2 + 0.27*k_z**2) * (1 - BR_inv)) / sum_over_f
-    mu_model_gamgam_13 = ((1.59*k_w**2 + 0.07*k_t**2 - 0.66*k_t*k_w) * (0.73*k_w**2 + 0.27*k_z**2) * (1 - BR_inv)) / sum_over_f
+    mu_model_gamgam_13 = ((1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * (0.73*k_w**2 + 0.27*k_z**2) * (1 - BR_inv)) / sum_over_f
     # mu_model_gg = (k_gg**2 * (0.73*k_w**2 + 0.27*k_z**2) * (1 - BR_inv)) / sum_over_f
     # mu_model_gamgam = (k_gamgam**2 * (0.73*k_w**2 + 0.27*k_z**2) * (1 - BR_inv)) / sum_over_f
 
@@ -141,7 +138,7 @@ def residue_ttH(params):
     k_mu = params['k_mu']
     k_tau = params['k_tau']
     # k_gg = params['k_gg']
-    # k_gamgam = params['k_gamgam']
+    k_gamgam = params['k_gamgam']
     #k_zgam = params['k_zgam']
     BR_inv = params['BR_inv']
 
@@ -151,8 +148,7 @@ def residue_ttH(params):
                   + k_t**2 * br['cc'] 
                   + k_mu**2 * br['mumu'] 
                   + k_tau**2 * br['tt'] 
-                #   + k_gg**2 * br['gg'] 
-                #   + k_gamgam**2 * br['gamgam']
+                  + (1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * br['gamgam']
     )
     
     mu_model_WW = (k_z**2 * k_t**2 * (1 - BR_inv)) / sum_over_f
@@ -161,7 +157,7 @@ def residue_ttH(params):
     mu_model_cc = (k_t**2 * k_t**2 * (1 - BR_inv)) / sum_over_f
     mu_model_mumu = (k_mu**2 * k_t**2 * (1 - BR_inv)) / sum_over_f
     mu_model_tau = (k_tau**2 * k_t**2 * (1 - BR_inv)) / sum_over_f
-    mu_model_gamgam = ((1.59*k_w**2 + 0.07*k_t**2 - 0.66*k_t*k_w) * k_t**2 * (1 - BR_inv)) / sum_over_f
+    mu_model_gamgam = ((1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * k_t**2 * (1 - BR_inv)) / sum_over_f
     # mu_model_gg = (k_gg**2 * k_t**2 * (1 - BR_inv)) / sum_over_f
     # mu_model_gamgam = (k_gamgam**2 * k_t**2 * (1 - BR_inv)) / sum_over_f
 
@@ -185,7 +181,7 @@ def residue_VH(params):
     k_mu = params['k_mu']
     k_tau = params['k_tau']
     # k_gg = params['k_gg']
-    # k_gamgam = params['k_gamgam']
+    k_gamgam = params['k_gamgam']
     #k_zgam = params['k_zgam']
     BR_inv = params['BR_inv']
 
@@ -195,8 +191,7 @@ def residue_VH(params):
                   + k_t**2 * br['cc'] 
                   + k_mu**2 * br['mumu'] 
                   + k_tau**2 * br['tt'] 
-                #   + k_gg**2 * br['gg'] 
-                #   + k_gamgam**2 * br['gamgam']
+                  + (1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * br['gamgam']
     )
     
     mu_model_WW = (k_z**2 * (0.5*k_z**2 + 0.5*k_w**2) * (1 - BR_inv)) / sum_over_f
@@ -205,7 +200,7 @@ def residue_VH(params):
     mu_model_cc = (k_t**2 * (0.5*k_z**2 + 0.5*k_w**2) * (1 - BR_inv)) / sum_over_f
     mu_model_mumu = (k_mu**2 *(0.5*k_z**2 + 0.5*k_w**2) * (1 - BR_inv)) / sum_over_f
     mu_model_tau = (k_tau**2 * (0.5*k_z**2 + 0.5*k_w**2) * (1 - BR_inv)) / sum_over_f
-    mu_model_gamgam = ((1.59*k_w**2 + 0.07*k_t**2 - 0.66*k_t*k_w) * (0.5*k_z**2 + 0.5*k_w**2) * (1 - BR_inv)) / sum_over_f
+    mu_model_gamgam = ((1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * (0.5*k_z**2 + 0.5*k_w**2) * (1 - BR_inv)) / sum_over_f
     # mu_model_gg = (k_gg**2 * (0.5*k_z**2 + 0.5*k_w**2) * (1 - BR_inv)) / sum_over_f
     # mu_model_gamgam = (k_gamgam**2 * (0.5*k_z**2 + 0.5*k_w**2) * (1 - BR_inv)) / sum_over_f
 
@@ -230,7 +225,7 @@ par.add('k_t', value = 1, min = -5, max = 5)
 par.add('k_mu', value = 1, min = -5, max = 5)
 par.add('k_tau', value = 1, min = -5, max = 5)
 # par.add('k_gg', value = 1, min = -5, max = 5)
-# par.add('k_gamgam', value = 1, min = -5, max = 5)
+par.add('k_gamgam', value = 1, min = -5, max = 5)
 #par.add('k_zgam', value = 1, min = -5, max = 5)
 par.add('BR_inv', value = 0, min = 0, max = 1)
 
