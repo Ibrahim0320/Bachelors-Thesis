@@ -13,7 +13,6 @@ def residue(params):
     res_VH = residue_VH(params)
 
     return np.hstack((res_ggF, res_ttH, res_VBF, res_VH))
-    # return res_ttH #np.hstack(res_ttH)
 
 def residue_ggF(params):
     k_w = params['k_w']
@@ -37,27 +36,43 @@ def residue_ggF(params):
                 #   + k_gamgam**2 * br['gamgam']
     )
     
-    mu_model_WW = (k_z**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
-    mu_model_ZZ = (k_w**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
-    mu_model_bb = (k_b**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
-    mu_model_cc = (k_t**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
-    mu_model_mumu = (k_mu**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
-    mu_model_tau = (k_tau**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
-    mu_model_gamgam = ((1.59*k_w**2 + 0.07*k_t**2 - 0.66*k_t*k_w) * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
+    mu_model_WW_78 = (k_z**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
+    mu_model_ZZ_78 = (k_w**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
+    mu_model_bb_78 = (k_b**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
+    mu_model_cc_78 = (k_t**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
+    mu_model_mumu_78 = (k_mu**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
+    mu_model_tau_78 = (k_tau**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
+    mu_model_gamgam_78 = ((1.59*k_w**2 + 0.07*k_t**2 - 0.66*k_t*k_w) * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
     # mu_model_gg = (k_gg**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
     # mu_model_gamgam = (k_gamgam**2 * (1.06*k_t**2 + 0.01*k_t**2 - 0.07*k_t*k_b) * (1 - BR_inv)) / sum_over_f
 
-    res_WW = (hd('mu','ggF','WW') - mu_model_WW)/hd('unc','ggF','WW')
-    res_ZZ = (hd('mu','ggF','ZZ') - mu_model_ZZ)/hd('unc','ggF','ZZ')
-    res_bb = (hd('mu','ggF','bb') - mu_model_bb)/hd('unc','ggF','bb')
-    res_cc = (hd('mu','ggF','cc') - mu_model_cc)/hd('unc','ggF','cc')
-    res_mumu = (hd('mu','ggF','mumu') - mu_model_mumu)/hd('unc','ggF','mumu')
-    res_tau = (hd('mu','ggF','tt') - mu_model_tau)/hd('unc','ggF','tt')
-    res_gamgam = (hd('mu','ggF','gamgam') - mu_model_gamgam)/hd('unc','ggF','gamgam')
+    mu_model_WW_13 = (k_z**2 * (1.04*k_t**2 + 0.002*k_b**2 - 0.04*k_t*k_b) * (1 - BR_inv)) / sum_over_f
+    mu_model_ZZ_13 = (k_w**2 * (1.04*k_t**2 + 0.002*k_b**2 - 0.04*k_t*k_b) * (1 - BR_inv)) / sum_over_f
+    mu_model_bb_13 = (k_b**2 * (1.04*k_t**2 + 0.002*k_b**2 - 0.04*k_t*k_b) * (1 - BR_inv)) / sum_over_f
+    mu_model_cc_13 = (k_t**2 * (1.04*k_t**2 + 0.002*k_b**2 - 0.04*k_t*k_b) * (1 - BR_inv)) / sum_over_f
+    mu_model_mumu_13 = (k_mu**2 * (1.04*k_t**2 + 0.002*k_b**2 - 0.04*k_t*k_b) * (1 - BR_inv)) / sum_over_f
+    mu_model_tau_13 = (k_tau**2 * (1.04*k_t**2 + 0.002*k_b**2 - 0.04*k_t*k_b) * (1 - BR_inv)) / sum_over_f
+    mu_model_gamgam_13 = ((1.59*k_w**2 + 0.07*k_t**2 - 0.66*k_t*k_w) * (1.04*k_t**2 + 0.002*k_b**2 - 0.04*k_t*k_b) * (1 - BR_inv)) / sum_over_f
+
+    res_WW_78 = (hd('mu','ggF','WW','78') - mu_model_WW_78)/hd('unc','ggF','WW','78')
+    res_ZZ_78 = (hd('mu','ggF','ZZ','78') - mu_model_ZZ_78)/hd('unc','ggF','ZZ','78')
+    res_bb_78 = (hd('mu','ggF','bb','78') - mu_model_bb_78)/hd('unc','ggF','bb','78')
+    res_cc_78 = (hd('mu','ggF','cc','78') - mu_model_cc_78)/hd('unc','ggF','cc','78')
+    res_mumu_78 = (hd('mu','ggF','mumu','78') - mu_model_mumu_78)/hd('unc','ggF','mumu','78')
+    res_tau_78 = (hd('mu','ggF','tt','78') - mu_model_tau_78)/hd('unc','ggF','tt','78')
+    res_gamgam_78 = (hd('mu','ggF','gamgam','78') - mu_model_gamgam_78)/hd('unc','ggF','gamgam','78')
+
+    res_WW_13 = (hd('mu','ggF','WW','13') - mu_model_WW_13)/hd('unc','ggF','WW','13')
+    res_ZZ_13 = (hd('mu','ggF','ZZ','13') - mu_model_ZZ_13)/hd('unc','ggF','ZZ','13')
+    res_bb_13 = (hd('mu','ggF','bb','13') - mu_model_bb_13)/hd('unc','ggF','bb','13')
+    res_cc_13 = (hd('mu','ggF','cc','13') - mu_model_cc_13)/hd('unc','ggF','cc','13')
+    res_mumu_13 = (hd('mu','ggF','mumu','13') - mu_model_mumu_13)/hd('unc','ggF','mumu','13')
+    res_tau_13 = (hd('mu','ggF','tt','13') - mu_model_tau_13)/hd('unc','ggF','tt','13')
+    res_gamgam_13 = (hd('mu','ggF','gamgam','13') - mu_model_gamgam_13)/hd('unc','ggF','gamgam','13')
     # res_gg = (hd('mu','ggF','gg') - mu_model_gg)/hd('unc','ggF','gg')
     
 
-    return np.hstack((res_WW, res_ZZ, res_bb, res_cc, res_mumu, res_tau, res_gamgam))
+    return np.hstack((res_WW_78, res_ZZ_78, res_bb_78, res_cc_78, res_mumu_78, res_tau_78, res_gamgam_78,res_WW_13, res_ZZ_13, res_bb_13, res_cc_13, res_mumu_13, res_tau_13, res_gamgam_13))
 
 def residue_VBF(params):
     k_w = params['k_w']
@@ -231,6 +246,6 @@ lmfit.report_fit(out)
 
 print(f"PID: {os.getpid()}")
 print("Sampling the posterior...")
-bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=300, steps=5000, thin=30, params=out.params, is_weighted=True, progress=True)
-emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,))#truths=list(out.params.valuesdict().values())
+bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=300, steps=1000, thin=30, params=out.params, is_weighted=True, progress=True)
+emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values()))
 plt.show()
