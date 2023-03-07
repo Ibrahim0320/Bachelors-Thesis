@@ -28,23 +28,17 @@ def residue(params):
     k_i = params['k_i'] #produktion, tth
     k_f = params['k_f'] #Fermioner, bb
     k_b = params['k_b'] #Bosoner, zz, ww
-    k_g = params['k_g'] #gamma gamma
+    k_g = params['k_gam'] #gamma gamma
     k_t = params['k_t'] #tau tau
-    k_gg = params['k_gg']
     BR_inv = params['BR_inv']
-    k_gg = k_g
+    
 
-    sum_over_f =  ( k_f ** 2 * BR_sm_bb + k_b ** 2 * ( BR_sm_WW + BR_sm_ZZ) + k_gg ** 2 *BR_sm_gg + k_t ** 2 * BR_sm_tt)
+    sum_over_f =  ( k_f ** 2 * BR_sm_bb + k_b ** 2 * ( BR_sm_WW + BR_sm_ZZ) + k_g ** 2 *BR_sm_gg + k_t ** 2 * BR_sm_tt)
 
-    # model_f = (k_f ** 2 * k_i ** 2 * (1 - BR_inv)) / sum_over_f
-    # model_b = (k_b ** 2 * k_i ** 2 * (1 - BR_inv)) / sum_over_f
-    # model_g = (k_g ** 2 * k_i ** 2 * (1 - BR_inv)) / sum_over_f
-    # model_t = (k_t ** 2 * k_i ** 2 * (1 - BR_inv)) / sum_over_f
-
-    model_f = model_mu(k_f, k_i, BR_inv)/sum_over_f
-    model_b = model_mu(k_b, k_i, BR_inv)/sum_over_f
-    model_g = model_mu(k_gg, k_i, BR_inv)/sum_over_f
-    model_t = model_mu(k_t, k_i, BR_inv)/sum_over_f
+    model_f = model_mu(k_i, k_f, BR_inv)/sum_over_f
+    model_b = model_mu(k_i, k_b, BR_inv)/sum_over_f
+    model_g = model_mu(k_i, k_g, BR_inv)/sum_over_f
+    model_t = model_mu(k_i, k_t, BR_inv)/sum_over_f
 
     res_ww = (mu_ww - model_b)/unc_ww
     res_zz = (mu_zz - model_b)/unc_zz
@@ -54,8 +48,8 @@ def residue(params):
 
     return np.hstack((res_ww, res_zz, res_bb, res_gg, res_tt))
 
-def model_mu(k_f,k_i,BR_inv):
-    return (k_f ** 2 * k_i ** 2 * (1 - BR_inv))
+def model_mu(k_i,k_f,BR_inv):
+    return (k_i ** 2 * k_f ** 2 * (1 - BR_inv))
     
 
 #Skapa parametrar och initiella värden
@@ -63,8 +57,7 @@ par = lmfit.Parameters()
 par.add('k_i', value = 1, min = -3, max = 3) #Produktionskappa
 par.add('k_f', value = 1, min = -3, max = 3) #Ett av kappana, typ för fermioner
 par.add('k_b', value = 1, min = -3, max = 3) #Ett av kappana, typ för bosoner
-par.add('k_gg', 1, min= -5, max = 5)
-par.add('k_g', value = 1, expr = '1.59 * k_b ** 2 + 0.07 * k_i ** 2 - 0.66 * k_i * k_b') # Gamma gamma
+par.add('k_gam', value = 1, min= -5, max = 5)
 par.add('k_t', value = 1, min = -3, max = 3) #tau tau
 par.add('BR_inv', 0, min = 0, max = 1) #Den ska vara med, har inte stelkoll på varför
 
@@ -80,22 +73,9 @@ result = out.minimize( method = 'nelder')
 # write error report
 lmfit.report_fit(result)
 
-# Covariansmatris
-#print(result.covar)
-
-#Confidence intervals
-
-# ci = lmfit.conf_interval(out, result)
-# lmfit.printfuncs.report_ci(ci)
-
 #Corner plot
-
-#print(result.params.values())
 
 plot_grej = lmfit.minimize(residue, params=result.params, method='emcee', nan_policy='omit', burn=300, steps=5000, thin=100, float_behavior='chi2', is_weighted=True, progress=True)
 emcee_plot = corner.corner(plot_grej.flatchain, labels=result.var_names, levels=(0.69,))#, truths=list(plot_grej.params.values()))
 
 plt.show()
-
-
-#print((result.params.valuesdict().values()))
