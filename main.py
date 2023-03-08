@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import data
 from data import hd,br
 import os
+import datetime
 
 def residue(params):
     res_ggF = residue_ggF(params)
@@ -233,10 +234,10 @@ par.add('k_t', value = 1, min = -5, max = 5)
 # par.add('k_c', value = 1, min = -5, max = 5) # är lika med k_t
 par.add('k_mu', value = 1, min = -5, max = 5)
 par.add('k_tau', value = 1, min = -5, max = 5)
-par.add('k_gg', value = 1, min = -5, max = 5)
-par.add('k_gamgam', value = 1, min = -5, max = 5)
+par.add('k_gg', value = 0, min = -5, max = 5)
+par.add('k_gamgam', value = 0, min = -5, max = 5)
 #par.add('k_zgam', value = 1, min = -5, max = 5)
-par.add('BR_inv', value = 0, min = 0, max = 0.5)
+par.add('BR_inv', value = 0, min = 0, max = 0.5, vary=False)
 
 print('Finding best fit parameters...')
 # MinimizerResult objekt
@@ -247,6 +248,12 @@ lmfit.report_fit(out)
 
 print(f"PID: {os.getpid()}")
 print("Sampling the posterior...")
-bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=300, steps=1000, thin=30, params=out.params, is_weighted=True, progress=True)
-emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,))#,truths=list(out.params.valuesdict().values()[:-1]))
-plt.show()
+bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=30, steps=100, thin=30, params=out.params, is_weighted=True, progress=True)
+np.savetxt(f'flatchains/flatchain_{datetime.datetime.now()}.csv',bay.flatchain, delimiter=',')
+np.savetxt(f'truths/truth_{datetime.datetime.now()}.csv', list(out.params.valuesdict().values()),delimiter=',')
+
+# emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values())) # med br_inv
+emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values())[:-1]) # utan br_inv
+plt.savefig(f"plots/corner_{datetime.datetime.now()}.svg")
+
+# plt.show()
