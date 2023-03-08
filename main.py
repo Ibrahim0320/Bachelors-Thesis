@@ -248,7 +248,7 @@ lmfit.report_fit(out)
 
 print(f"PID: {os.getpid()}")
 print("Sampling the posterior...")
-bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=300, steps=2000, thin=30, params=out.params, is_weighted=True, progress=True)
+bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=2000, steps=50000, thin=100, params=out.params, is_weighted=True, progress=True)
 print("Sampling done. Saving...")
 np.savetxt(f'flatchains/flatchain_{datetime.datetime.now()}.csv',bay.flatchain, delimiter=',')
 np.savetxt(f'truths/truth_{datetime.datetime.now()}.csv', list(out.params.valuesdict().values()),delimiter=',')
