@@ -13,8 +13,9 @@ def residue(params):
     res_VBF = residue_VBF(params)
     res_ttH = residue_ttH(params)
     res_VH = residue_VH(params)
+    res_BR = residue_BR(params)
 
-    return np.hstack((res_ggF, res_ttH, res_VBF, res_VH))
+    return np.hstack((res_ggF, res_ttH, res_VBF, res_VH, res_BR))
 
 def residue_ggF(params):
     k_w = params['k_w']
@@ -225,6 +226,35 @@ def residue_VH(params):
     res_gg = (hd('mu','VH','gg') - mu_model_gg)/hd('unc','VH','gg')
 
     return np.hstack((res_WW, res_ZZ, res_bb, res_mumu, res_tau, res_gamgam,res_gg))
+
+def residue_BR(params):
+    k_w = params['k_w']
+    k_z = params['k_z']
+    k_t = params['k_t']
+    k_b = params['k_b']
+    k_mu = params['k_mu']
+    k_tau = params['k_tau']
+    k_gg = params['k_gg']
+    k_gamgam = params['k_gamgam']
+    #k_zgam = params['k_zgam']
+    BR_inv = params['BR_inv']
+
+    k_VH = 0.5*k_z**2 + 0.5*k_w**2
+    k_gg = 0.01 *k_b**2 - 0.16*k_b*k_gg + 1.93*k_gg**2 - 0.12*k_t*k_b + 2.93*k_gg*k_t + 1.11*k_t**2
+
+    sum_over_f = (k_w**2 * br['WW']
+                  + k_z**2 * br['ZZ'] 
+                  + k_b**2 *br['bb'] 
+                  + k_t**2 * br['cc'] 
+                  + k_mu**2 * br['mumu'] 
+                  + k_tau**2 * br['tt'] 
+                  + (1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * br['gamgam']
+                  + k_gg * br['gg']
+    )
+
+    gam_model = sum_over_f/(1-BR_inv)
+
+    return (0.8-gam_model)/(0.7) # (data-model)/unc
 
 # Skapa parametrar
 par = lmfit.Parameters()
