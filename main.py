@@ -238,7 +238,7 @@ par.add('k_tau', value = 1, min = -5, max = 5)
 par.add('k_gg', value = 0, min = -5, max = 5)
 par.add('k_gamgam', value = 0, min = -5, max = 5)
 #par.add('k_zgam', value = 1, min = -5, max = 5)
-par.add('BR_inv', value = 0, min = 0, max = 0.5, vary=True)
+par.add('BR_inv', value = 0, min = 0, max = 0.15, vary=True)
 
 print('Finding best fit parameters...')
 # MinimizerResult objekt
