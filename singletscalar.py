@@ -20,12 +20,12 @@ def residue(params):
     return np.hstack((res_ggF, res_ttH, res_VBF, res_VH, res_BR))
 
 def residue_ggF(params):
-    k_w = params['calpha']
-    k_z = params['calpha']
-    k_t = params['calpha']
-    k_b = params['calpha']
-    k_mu = params['calpha']
-    k_tau = params['calpha']
+    k_w = params['cos_t']
+    k_z = params['cos_t']
+    k_t = params['cos_t']
+    k_b = params['cos_t']
+    k_mu = params['cos_t']
+    k_tau = params['cos_t']
     k_gg = params['k_gg']
     k_gamgam = params['k_gamgam']
     #k_zgam = params['k_zgam']
@@ -83,12 +83,12 @@ def residue_ggF(params):
     return np.hstack((res_WW_78, res_ZZ_78, res_bb_78, res_mumu_78, res_tau_78, res_gamgam_78,res_WW_13, res_ZZ_13, res_bb_13, res_mumu_13, res_tau_13, res_gamgam_13, res_gg_13, res_gg_78))
 
 def residue_VBF(params):
-    k_w = params['calpha']
-    k_z = params['calpha']
-    k_t = params['calpha']
-    k_b = params['calpha']
-    k_mu = params['calpha']
-    k_tau = params['calpha']
+    k_w = params['cos_t']
+    k_z = params['cos_t']
+    k_t = params['cos_t']
+    k_b = params['cos_t']
+    k_mu = params['cos_t']
+    k_tau = params['cos_t']
     k_gg = params['k_gg']
     k_gamgam = params['k_gamgam']
     #k_zgam = params['k_zgam']
@@ -144,12 +144,12 @@ def residue_VBF(params):
     return np.hstack((res_WW_78, res_ZZ_78, res_bb_78, res_mumu_78, res_tau_78, res_gamgam_78, res_WW_13, res_ZZ_13, res_bb_13, res_mumu_13, res_tau_13, res_gamgam_13,res_gg_78, res_gg_13))
 
 def residue_ttH(params):
-    k_w = params['calpha']
-    k_z = params['calpha']
-    k_t = params['calpha']
-    k_b = params['calpha']
-    k_mu = params['calpha']
-    k_tau = params['calpha']
+    k_w = params['cos_t']
+    k_z = params['cos_t']
+    k_t = params['cos_t']
+    k_b = params['cos_t']
+    k_mu = params['cos_t']
+    k_tau = params['cos_t']
     k_gg = params['k_gg']
     k_gamgam = params['k_gamgam']
     #k_zgam = params['k_zgam']
@@ -188,12 +188,12 @@ def residue_ttH(params):
     return np.hstack((res_WW, res_ZZ, res_bb, res_mumu, res_tau, res_gamgam, res_gg))
 
 def residue_VH(params):
-    k_w = params['calpha']
-    k_z = params['calpha']
-    k_t = params['calpha']
-    k_b = params['calpha']
-    k_mu = params['calpha']
-    k_tau = params['calpha']
+    k_w = params['cos_t']
+    k_z = params['cos_t']
+    k_t = params['cos_t']
+    k_b = params['cos_t']
+    k_mu = params['cos_t']
+    k_tau = params['cos_t']
     k_gg = params['k_gg']
     k_gamgam = params['k_gamgam']
     #k_zgam = params['k_zgam']
@@ -232,12 +232,12 @@ def residue_VH(params):
     return np.hstack((res_WW, res_ZZ, res_bb, res_mumu, res_tau, res_gamgam,res_gg))
 
 def residue_BR(params):
-    k_w = params['calpha']
-    k_z = params['calpha']
-    k_t = params['calpha']
-    k_b = params['calpha']
-    k_mu = params['calpha']
-    k_tau = params['calpha']
+    k_w = params['cos_t']
+    k_z = params['cos_t']
+    k_t = params['cos_t']
+    k_b = params['cos_t']
+    k_mu = params['cos_t']
+    k_tau = params['cos_t']
     k_gg = params['k_gg']
     k_gamgam = params['k_gamgam']
     #k_zgam = params['k_zgam']
@@ -258,12 +258,12 @@ def residue_BR(params):
 
     gam_model = sum_over_f/(1-BR_inv)
 
-    return (0.8-gam_model)/(0.7) # (data-model)/unc
+    return (0.775-gam_model)/(0.68) # (data-model)/unc
 
 
 # Skapa parametrar
 par = lmfit.Parameters()
-par.add('calpha', value = 1, min = -5, max = 5)
+par.add('cos_t', value = 1, min = -5, max = 5)
 par.add('k_gg', value = 0, min = -5, max = 5)
 par.add('k_gamgam', value = 0, min = -5, max = 5)
 #par.add('k_zgam', value = 1, min = -5, max = 5)
@@ -278,7 +278,7 @@ lmfit.report_fit(out)
 
 print(f"PID: {os.getpid()}")
 print("Sampling the posterior...")
-bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=2000, steps=50000, thin=200, params=out.params, is_weighted=True, progress=True)
+bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=100, steps=2000, thin=30, params=out.params, is_weighted=True, progress=True)
 print("Sampling done. Saving...")
 bay.flatchain.to_csv(f'flatchains/flatchain_{datetime.datetime.now()}.csv', sep=',')
 np.savetxt(f'truths/truth_{datetime.datetime.now()}.csv', list(out.params.valuesdict().values()),delimiter=',')
