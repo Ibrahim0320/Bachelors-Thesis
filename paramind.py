@@ -254,7 +254,7 @@ def residue_BR(params):
 
     gam_model = sum_over_f/(1-BR_inv)
 
-    return (0.8-gam_model)/(0.7) # (data-model)/unc
+    return (0.775-gam_model)/(0.68) # (data-model)/unc
 
 # Skapa parametrar
 par = lmfit.Parameters()
