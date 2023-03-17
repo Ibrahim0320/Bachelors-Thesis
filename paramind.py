@@ -281,11 +281,11 @@ print(f"PID: {os.getpid()}")
 print("Sampling the posterior...")
 bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=2000, steps=50000, thin=200, params=out.params, is_weighted=True, progress=True)
 print("Sampling done. Saving...")
-bay.flatchain.to_csv(f'flatchains/flatchain_{datetime.datetime.now()}.csv', sep=',')
-np.savetxt(f'truths/truth_{datetime.datetime.now()}.csv', list(out.params.valuesdict().values()),delimiter=',')
+bay.flatchain.to_csv(f'flatchains/flatchain_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.csv', sep=',')
+np.savetxt(f'truths/truth_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.csv', list(out.params.valuesdict().values()),delimiter=',')
 
 emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values())) # med br_inv
 # emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values())[:-1]) # utan br_inv
-plt.savefig(f"plots/corner_{datetime.datetime.now()}.svg")
+plt.savefig(f'plots/corner_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.svg')
 print("I'm done here. Goodbye!")
 # plt.show()
