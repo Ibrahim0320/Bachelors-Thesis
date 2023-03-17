@@ -15,9 +15,8 @@ def residue(params):
     res_VBF = residue_VBF(params)
     res_ttH = residue_ttH(params)
     res_VH = residue_VH(params)
-    res_BR = residue_BR(params)
 
-    return np.hstack((res_ggF, res_ttH, res_VBF, res_VH, res_BR))
+    return np.hstack((res_ggF, res_ttH, res_VBF, res_VH))
 
 def residue_ggF(params):
     k_w = params['cos_t']
@@ -231,35 +230,6 @@ def residue_VH(params):
 
     return np.hstack((res_WW, res_ZZ, res_bb, res_mumu, res_tau, res_gamgam,res_gg))
 
-def residue_BR(params):
-    k_w = params['cos_t']
-    k_z = params['cos_t']
-    k_t = params['cos_t']
-    k_b = params['cos_t']
-    k_mu = params['cos_t']
-    k_tau = params['cos_t']
-    k_gg = params['k_gg']
-    k_gamgam = params['k_gamgam']
-    #k_zgam = params['k_zgam']
-    BR_inv = params['BR_inv']
-
-    k_VH = 0.5*k_z**2 + 0.5*k_w**2
-    k_gg = 0.01 *k_b**2 - 0.16*k_b*k_gg + 1.93*k_gg**2 - 0.12*k_t*k_b + 2.93*k_gg*k_t + 1.11*k_t**2
-
-    sum_over_f = (k_w**2 * br['WW']
-                  + k_z**2 * br['ZZ'] 
-                  + k_b**2 *br['bb'] 
-                  + k_t**2 * br['cc'] 
-                  + k_mu**2 * br['mumu'] 
-                  + k_tau**2 * br['tt'] 
-                  + (1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * br['gamgam']
-                  + k_gg * br['gg']
-    )
-
-    gam_model = sum_over_f/(1-BR_inv)
-
-    return (0.775-gam_model)/(0.68) # (data-model)/unc
-
 
 # Skapa parametrar
 par = lmfit.Parameters()
@@ -278,7 +248,7 @@ lmfit.report_fit(out)
 
 print(f"PID: {os.getpid()}")
 print("Sampling the posterior...")
-bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=100, steps=1000, thin=30, params=out.params, is_weighted=True, progress=True)
+bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=500, steps=5000, thin=50, params=out.params, is_weighted=True, progress=True)
 print("Sampling done. Saving...")
 
 header = list(out.params.valuesdict().values())
