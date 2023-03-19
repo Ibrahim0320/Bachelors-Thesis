@@ -22,10 +22,11 @@ def residue_ggF(params):
 
     k_w = np.sqrt(1-cBA**2)
     k_z = k_w
+
     k_t = cBA/tB+np.sqrt(1-cBA**2)
-    k_b = k_t
-    k_mu = k_t
-    k_tau = k_t
+    k_b = -tB*cBA+np.sqrt(1-cBA**2)
+    k_mu = k_b
+    k_tau = k_b
     k_gg = params['k_gg']
     k_gamgam = params['k_gamgam']
     #k_zgam = params['k_zgam']
@@ -90,10 +91,11 @@ def residue_VBF(params):
 
     k_w = np.sqrt(1-cBA**2)
     k_z = k_w
+
     k_t = cBA/tB+np.sqrt(1-cBA**2)
-    k_b = k_t
-    k_mu = k_t
-    k_tau = k_t
+    k_b = -tB*cBA+np.sqrt(1-cBA**2)
+    k_mu = k_b
+    k_tau = k_b
     k_gg = params['k_gg']
     k_gamgam = params['k_gamgam']
     #k_zgam = params['k_zgam']
@@ -153,10 +155,11 @@ def residue_ttH(params):
 
     k_w = np.sqrt(1-cBA**2)
     k_z = k_w
+
     k_t = cBA/tB+np.sqrt(1-cBA**2)
-    k_b = k_t
-    k_mu = k_t
-    k_tau = k_t
+    k_b = -tB*cBA+np.sqrt(1-cBA**2)
+    k_mu = k_b
+    k_tau = k_b
     k_gg = params['k_gg']
     k_gamgam = params['k_gamgam']
     #k_zgam = params['k_zgam']
@@ -200,10 +203,11 @@ def residue_VH(params):
 
     k_w = np.sqrt(1-cBA**2)
     k_z = k_w
+
     k_t = cBA/tB+np.sqrt(1-cBA**2)
-    k_b = k_t
-    k_mu = k_t
-    k_tau = k_t
+    k_b = -tB*cBA+np.sqrt(1-cBA**2)
+    k_mu = k_b
+    k_tau = k_b
     k_gg = params['k_gg']
     k_gamgam = params['k_gamgam']
     #k_zgam = params['k_zgam']
@@ -245,7 +249,7 @@ def residue_VH(params):
 # Skapa parametrar
 par = lmfit.Parameters()
 par.add('tanB', value=1)
-par.add('cosBA',min=-1, max=1, value=0)
+par.add('cosBA',min=-1, max=1, value=1)
 par.add('k_gamgam', value = 0, min = -2, max = 2)
 par.add('k_gg', value = 0, min = -1, max = 1, vary=False)
 par.add('BR_inv', value = 0, min = 0, max = 0.5, vary=False)

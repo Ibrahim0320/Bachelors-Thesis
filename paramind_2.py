@@ -27,6 +27,11 @@ def residue_ggF(params):
     k_gamgam = params['k_gamgam']
     #k_zgam = params['k_zgam']
     BR_inv = params['BR_inv']
+
+    k_gg = 0.01 *k_b**2 - 0.16*k_b*k_gg + 1.93*k_gg**2 - 0.12*k_t*k_b + 2.93*k_gg*k_t + 1.11*k_t**2
+    k_ggF_13 = k_gg
+    k_ggF_7 = k_gg
+
     sum_over_f = (k_w**2 * br['WW']
                   + k_z**2 * br['ZZ'] 
                   + k_b**2 *br['bb'] 
@@ -34,14 +39,12 @@ def residue_ggF(params):
                   + k_mu**2 * br['mumu'] 
                   + k_tau**2 * br['tt'] 
                   + (1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * br['gamgam']
-                  + (0.01 *k_b**2 - 0.16*k_b*k_gg + 1.93*k_gg**2 - 0.12*k_t*k_b + 2.93*k_gg*k_t + 1.11*k_t**2 ) * br['gg']
+                  + k_gg * br['gg']
     )
     
     # k_ggF_7 = 1.06 * k_t**2 + 0.01 * k_b**2 - 0.07 * k_t * k_b
     # k_ggF_13 = 1.04*k_t**2 + 0.002*k_b**2 - 0.04*k_t*k_b
-    k_gg = 0.01 *k_b**2 - 0.16*k_b*k_gg + 1.93*k_gg**2 - 0.12*k_t*k_b + 2.93*k_gg*k_t + 1.11*k_t**2
-    k_ggF_13 = k_gg
-    k_ggF_7 = k_gg
+
 
     mu_model_WW_78 = (k_z**2 * k_ggF_7 * (1 - BR_inv)) / sum_over_f
     mu_model_ZZ_78 = (k_w**2 * k_ggF_7 * (1 - BR_inv)) / sum_over_f
