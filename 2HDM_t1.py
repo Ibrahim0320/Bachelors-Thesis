@@ -247,8 +247,8 @@ par = lmfit.Parameters()
 par.add('tanB', value=1)
 par.add('cosBA',min=-1, max=1, value=0)
 par.add('k_gamgam', value = 0, min = -2, max = 2)
-par.add('k_gg', value = 0, min = -1, max = 1, vary=False)
 par.add('BR_inv', value = 0, min = 0, max = 0.5, vary=False)
+par.add('k_gg', value = 0, min = -1, max = 1, vary=False)
 
 print('Finding best fit parameters...')
 # MinimizerResult objekt
