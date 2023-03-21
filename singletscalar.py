@@ -233,7 +233,7 @@ def residue_VH(params):
 
 # Skapa parametrar
 par = lmfit.Parameters()
-par.add('k', value = 0, min = -1, max = 1)
+par.add('k', value=0.001, min = 0, max = 1)
 par.add('k_gg', value = 0, min = -5, max = 5, vary=False)
 par.add('k_gamgam', value = 0, min = -5, max = 5, vary=False)
 #par.add('k_zgam', value = 1, min = -5, max = 5)

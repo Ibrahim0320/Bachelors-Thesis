@@ -17,14 +17,12 @@ def residue(params):
     return np.hstack((res_ggF, res_ttH, res_VBF, res_VH))
 
 def residue_ggF(params):
-    xi = params['xi']
-
-    k_w = np.sqrt(1-xi)
-    k_z = k_w
-    k_t = (1-2*xi)/np.sqrt(1-xi)
-    k_b = k_t
-    k_mu = k_t
-    k_tau = k_t
+    k_w = params['k_v']
+    k_z = params['k_v']
+    k_t = params['k_f']
+    k_b = params['k_f']
+    k_mu = params['k_f']
+    k_tau = params['k_f']
     k_gg = params['k_gg']
     k_gamgam = params['k_gamgam']
     #k_zgam = params['k_zgam']
@@ -84,14 +82,12 @@ def residue_ggF(params):
     return np.hstack((res_WW_78, res_ZZ_78, res_bb_78, res_mumu_78, res_tau_78, res_gamgam_78,res_WW_13, res_ZZ_13, res_bb_13, res_mumu_13, res_tau_13, res_gamgam_13, res_gg_13, res_gg_78))
 
 def residue_VBF(params):
-    xi = params['xi']
-
-    k_w = np.sqrt(1-xi)
-    k_z = k_w
-    k_t = (1-2*xi)/np.sqrt(1-xi)
-    k_b = k_t
-    k_mu = k_t
-    k_tau = k_t
+    k_w = params['k_v']
+    k_z = params['k_v']
+    k_t = params['k_f']
+    k_b = params['k_f']
+    k_mu = params['k_f']
+    k_tau = params['k_f']
     k_gg = params['k_gg']
     k_gamgam = params['k_gamgam']
     #k_zgam = params['k_zgam']
@@ -146,14 +142,12 @@ def residue_VBF(params):
     return np.hstack((res_WW_78, res_ZZ_78, res_bb_78, res_mumu_78, res_tau_78, res_gamgam_78, res_WW_13, res_ZZ_13, res_bb_13, res_mumu_13, res_tau_13, res_gamgam_13,res_gg_78, res_gg_13))
 
 def residue_ttH(params):
-    xi = params['xi']
-
-    k_w = np.sqrt(1-xi)
-    k_z = k_w
-    k_t = (1-2*xi)/np.sqrt(1-xi)
-    k_b = k_t
-    k_mu = k_t
-    k_tau = k_t
+    k_w = params['k_v']
+    k_z = params['k_v']
+    k_t = params['k_f']
+    k_b = params['k_f']
+    k_mu = params['k_f']
+    k_tau = params['k_f']
     k_gg = params['k_gg']
     k_gamgam = params['k_gamgam']
     #k_zgam = params['k_zgam']
@@ -192,14 +186,12 @@ def residue_ttH(params):
     return np.hstack((res_WW, res_ZZ, res_bb, res_mumu, res_tau, res_gamgam, res_gg))
 
 def residue_VH(params):
-    xi = params['xi']
-
-    k_w = np.sqrt(1-xi)
-    k_z = k_w
-    k_t = (1-2*xi)/np.sqrt(1-xi)
-    k_b = k_t
-    k_mu = k_t
-    k_tau = k_t
+    k_w = params['k_v']
+    k_z = params['k_v']
+    k_t = params['k_f']
+    k_b = params['k_f']
+    k_mu = params['k_f']
+    k_tau = params['k_f']
     k_gg = params['k_gg']
     k_gamgam = params['k_gamgam']
     #k_zgam = params['k_zgam']
@@ -240,7 +232,8 @@ def residue_VH(params):
 
 # Skapa parametrar
 par = lmfit.Parameters()
-par.add('xi', value=0, min=0, max=1)
+par.add('k_v', value = 1)
+par.add('k_f', value = 1)
 par.add('k_gg', value = 0, min = -5, max = 5, vary=False)
 par.add('k_gamgam', value = 0, min = -5, max = 5, vary=False)
 #par.add('k_zgam', value = 1, min = -5, max = 5)
@@ -255,12 +248,12 @@ lmfit.report_fit(out)
 
 print(f"PID: {os.getpid()}")
 print("Sampling the posterior...")
-bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=500, steps=5000, thin=50, params=out.params, is_weighted=True, progress=True)
+bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=500, steps=15000, thin=60, params=out.params, is_weighted=True, progress=True)
 print("Sampling done. Saving...")
 bay.flatchain.to_csv(f'flatchains/flatchain_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.csv', sep=',')
 np.savetxt(f'truths/truth_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.csv', list(out.params.valuesdict().values()),delimiter=',')
 
-emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=[list(out.params.valuesdict().values())[0]]) # med br_inv
+emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values())[1:3]) # med br_inv
 # emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values())[:-1]) # utan br_inv
 plt.savefig(f'plots/corner_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.svg')
 print("I'm done here. Goodbye!")

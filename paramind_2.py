@@ -232,16 +232,16 @@ def residue_VH(params):
 
 # Skapa parametrar
 par = lmfit.Parameters()
-par.add('k_v', value = 1, min = -1, max = 1)
-par.add('k_b', value = 1, min = -5, max = 5)
-par.add('k_t', value = 1, min = -5, max = 5)
+par.add('k_v', value = 1, min = -1, max = 1,vary=False)
+par.add('k_b', value = 1, min = -5, max = 5,vary=False)
+par.add('k_t', value = 1, min = -5, max = 5,vary=False)
 # par.add('k_c', value = 1, min = -5, max = 5) # är lika med k_t
-par.add('k_mu', value = 1, min = -5, max = 5)
-par.add('k_tau', value = 1, min = -5, max = 5)
-par.add('k_gg', value = 0, min = -5, max = 5)
-par.add('k_gamgam', value = 0, min = -5, max = 5)
+par.add('k_mu', value = 1, min = -5, max = 5,vary=False)
+par.add('k_tau', value = 1, min = -5, max = 5,vary=False)
+par.add('k_gg', value = 0)
+par.add('k_gamgam', value = 0)
 #par.add('k_zgam', value = 1, min = -5, max = 5)
-par.add('BR_inv', value = 0, min = 0, max = 0.5, vary=True)
+par.add('BR_inv', value = 0, min = 0, max = 0.5, vary=False)
 
 print('Finding best fit parameters...')
 # MinimizerResult objekt
@@ -252,12 +252,12 @@ lmfit.report_fit(out)
 
 print(f"PID: {os.getpid()}")
 print("Sampling the posterior...")
-bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=1000, steps=55000, thin=100, params=out.params, is_weighted=True, progress=True)
+bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=500, steps=15000, thin=60, params=out.params, is_weighted=True, progress=True)
 print("Sampling done. Saving...")
 bay.flatchain.to_csv(f'flatchains/flatchain_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.csv', sep=',')
 np.savetxt(f'truths/truth_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.csv', list(out.params.valuesdict().values()),delimiter=',')
 
-emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values())) # med br_inv
+emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values())[5:-1]) # med br_inv
 # emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values())[:-1]) # utan br_inv
 plt.savefig(f'plots/corner_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.svg')
 print("I'm done here. Goodbye!")
