@@ -22,7 +22,8 @@ def residue_ggF(params):
 
     k_w = np.sqrt(1-cBA**2)
     k_z = k_w
-    k_t = cBA/tB+np.sqrt(1-cBA**2)
+
+    k_t = cBA/(10**tB)+np.sqrt(1-cBA**2)
     k_b = k_t
     k_mu = k_t
     k_tau = k_t
@@ -90,7 +91,8 @@ def residue_VBF(params):
 
     k_w = np.sqrt(1-cBA**2)
     k_z = k_w
-    k_t = cBA/tB+np.sqrt(1-cBA**2)
+
+    k_t = cBA/(10**tB)+np.sqrt(1-cBA**2)
     k_b = k_t
     k_mu = k_t
     k_tau = k_t
@@ -153,7 +155,8 @@ def residue_ttH(params):
 
     k_w = np.sqrt(1-cBA**2)
     k_z = k_w
-    k_t = cBA/tB+np.sqrt(1-cBA**2)
+
+    k_t = cBA/(10**tB)+np.sqrt(1-cBA**2)
     k_b = k_t
     k_mu = k_t
     k_tau = k_t
@@ -200,7 +203,8 @@ def residue_VH(params):
 
     k_w = np.sqrt(1-cBA**2)
     k_z = k_w
-    k_t = cBA/tB+np.sqrt(1-cBA**2)
+
+    k_t = cBA/(10**tB)+np.sqrt(1-cBA**2)
     k_b = k_t
     k_mu = k_t
     k_tau = k_t
@@ -244,9 +248,9 @@ def residue_VH(params):
 
 # Skapa parametrar
 par = lmfit.Parameters()
-par.add('tanB', value=1)
+par.add('tanB', value=0.01, min=-2,max=2)
 par.add('cosBA',min=-1, max=1, value=0)
-par.add('k_gamgam', value = 0, min = -2, max = 2)
+par.add('k_gamgam', value = 0,vary=False)
 par.add('BR_inv', value = 0, min = 0, max = 0.5, vary=False)
 par.add('k_gg', value = 0, min = -1, max = 1, vary=False)
 
@@ -259,12 +263,12 @@ lmfit.report_fit(out)
 
 print(f"PID: {os.getpid()}")
 print("Sampling the posterior...")
-bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=1000, steps=55000, thin=100, params=out.params, is_weighted=True, progress=True)
+bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=2000, steps=100000, thin=500, params=out.params, is_weighted=True, progress=True,run_mcmc_kwargs={'skip_initial_state_check':True})
 print("Sampling done. Saving...")
 bay.flatchain.to_csv(f'flatchains/flatchain_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.csv', sep=',')
 np.savetxt(f'truths/truth_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.csv', list(out.params.valuesdict().values()),delimiter=',')
 
-emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values())) # med br_inv
+emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values())[0:2]) # med br_inv
 # emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values())[:-1]) # utan br_inv
 plt.savefig(f'plots/corner_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.svg')
 print("I'm done here. Goodbye!")
