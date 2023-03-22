@@ -5,12 +5,10 @@ import corner
 
 run = "flatchain_2023-03-18_1503"
 
-SM_truth = [1, 1, 1, 1, 1, 0, 0, 0]
 var_names = ['k_v','k_b','k_t','k_mu','k_tau','k_gg','k_gamgam', 'BR_inv']
 
+SM_truth = [1, 1, 1, 1, 1, 0, 0, 0]
 SM_points = np.array([SM_truth, SM_truth])
-
-ndim = len(var_names)
 
 flatchain = pandas.read_csv(f"flatchains/{run}.csv", sep=",")[var_names]
 truths = np.loadtxt(f"truths/truth_2023-03-18_1503.csv", delimiter=",")
