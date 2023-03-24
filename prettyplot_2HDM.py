@@ -1,0 +1,35 @@
+import pandas
+import numpy as np
+import matplotlib.pyplot as plt
+import corner
+
+run = "2023-03-23_0302"
+
+var_names = ['tanB','cosBA']
+
+SM_truth = [1, 1, 1, 1, 1, 0, 0, 0]
+SM_points = np.array([SM_truth, SM_truth])
+labels = [
+    r"$\log(\tan(\beta))$",
+    r"$\cos(\beta-\alpha)$"
+]
+
+flatchain = pandas.read_csv(f"flatchains/flatchain_{run}.csv", sep=",")[var_names]
+truths = np.loadtxt(f"truths/truth_{run}.csv", delimiter=",")[0:2]
+
+emcee_plot = corner.corner(flatchain[flatchain.columns[::-1]], 
+                           labels=labels[::-1], 
+                           levels = (0.69,0.95,), 
+                           bins=30, 
+                           smooth=True, 
+                           verbose=True, 
+                           plot_datapoints=True, 
+                        #    range=[(-0.1,0.1), (-2,2)]
+                        #    quantiles=(0.16, 0.84), 
+                        #    show_titles=True
+                           )
+
+# corner.overplot_lines(emcee_plot, SM_truth, color = 'C1')
+# corner.overplot_points(emcee_plot, SM_points, marker = '*', color = 'orangered')
+
+plt.show()
