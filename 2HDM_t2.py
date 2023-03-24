@@ -250,7 +250,7 @@ def residue_VH(params):
 par = lmfit.Parameters()
 par.add('tanB', value=0.01, min=-2, max=2)
 par.add('cosBA', min=-1, max=1, value=0)
-par.add('k_gamgam', value = 0, vary=False)
+par.add('k_gamgam', value = 0, vary=True)
 par.add('BR_inv', value = 0, min = 0, max = 0.5, vary=False)
 par.add('k_gg', value = 0, min = -1, max = 1, vary=False)
 
@@ -268,7 +268,7 @@ print("Sampling done. Saving...")
 bay.flatchain.to_csv(f'flatchains/flatchain_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.csv', sep=',')
 np.savetxt(f'truths/truth_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.csv', list(out.params.valuesdict().values()),delimiter=',')
 
-emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values())[0:2]) # med br_inv
+emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values())[0:3]) # med br_inv
 # emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values())[:-1]) # utan br_inv
 plt.savefig(f'plots/corner_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.svg')
 print("I'm done here. Goodbye!")
