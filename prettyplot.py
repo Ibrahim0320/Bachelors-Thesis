@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import corner
 
-run = "flatchain_2023-03-18_1503"
+run = "2023-03-18_1503"
 
 var_names = ['k_v','k_b','k_t','k_mu','k_tau','k_gg','k_gamgam', 'BR_inv']
 
@@ -20,10 +20,8 @@ labels = [
     r"$BR_{inv}$",
 ]
 
-flatchain = pandas.read_csv(f"flatchains/{run}.csv", sep=",")[var_names]
-truths = np.loadtxt(f"truths/truth_2023-03-18_1503.csv", delimiter=",")
-
-print(flatchain)
+flatchain = pandas.read_csv(f"flatchains/flatchain_{run}.csv", sep=",")[var_names]
+truths = np.loadtxt(f"truths/truth_{run}.csv", delimiter=",")
 
 emcee_plot = corner.corner(flatchain, 
                            labels=labels, 
@@ -34,10 +32,10 @@ emcee_plot = corner.corner(flatchain,
                            verbose=True, 
                            plot_datapoints=False, 
                            quantiles=(0.16, 0.84), 
-                           show_titles=True, 
-                           use_math_text=True)
+                           show_titles=True
+                           )
 
 # corner.overplot_lines(emcee_plot, SM_truth, color = 'C1')
-corner.overplot_points(emcee_plot, SM_points, marker = 's', color = 'orangered')
+corner.overplot_points(emcee_plot, SM_points, marker = '*', color = 'orangered')
 
 plt.show()
