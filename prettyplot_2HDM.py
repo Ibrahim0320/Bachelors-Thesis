@@ -3,15 +3,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import corner
 
-run = "2023-03-23_0302"
+run = "2023-03-24_2130"
 
-var_names = ['tanB','cosBA']
+var_names = ['tanB','cosBA','k_gamgam']
 
 SM_truth = [1, 1, 1, 1, 1, 0, 0, 0]
 SM_points = np.array([SM_truth, SM_truth])
 labels = [
     r"$\log(\tan(\beta))$",
-    r"$\cos(\beta-\alpha)$"
+    r"$\cos(\beta-\alpha)$",
+    r"$\kappa_{\gamma \gamma}$"
 ]
 
 flatchain = pandas.read_csv(f"flatchains/flatchain_{run}.csv", sep=",")[var_names]
