@@ -2,32 +2,37 @@ import pandas
 import numpy as np
 import matplotlib.pyplot as plt
 import corner
+import matplotlib
 
-run = "2023-03-18_1503"
+run = "2023-03-08_1756"
 
-var_names = ['k_v','k_b','k_t','k_mu','k_tau','k_gg','k_gamgam', 'BR_inv']
-# var_names = ['k_w','k_z','k_b','k_t','k_mu','k_tau','k_gg','k_gamgam']
+# var_names = ['k_v','k_b','k_t','k_mu','k_tau','k_gg','k_gamgam', 'BR_inv']
+var_names = ['k_w','k_z','k_b','k_t','k_mu','k_tau','k_gg','k_gamgam']
 
-SM_truth = [1, 1, 1, 1, 1, 0, 0, 0]
-# SM_truth = [1, 1, 1, 1, 1, 1, 0, 0]
+# SM_truth = [1, 1, 1, 1, 1, 0, 0, 0]
+SM_truth = [1, 1, 1, 1, 1, 1, 0, 0]
 SM_points = np.array([SM_truth, SM_truth])
 labels = [
-    r"$\kappa_v$",
-    # r"$\kappa_w$",
-    # r"$\kappa_z$",
+    # r"$\kappa_v$",
+    r"$\kappa_w$",
+    r"$\kappa_z$",
     r"$\kappa_b$",
     r"$\kappa_t$",
     r"$\kappa_{\mu}$",
     r"$\kappa_{\tau}$",
     r"$\kappa_{gg}$",
     r"$\kappa_{\gamma \gamma}$",
-    r"$BR_{inv}$",
+    # r"$BR_{inv}$",
 ]
 
-flatchain = pandas.read_csv(f"flatchains/flatchain_{run}.csv", sep=",")[var_names]
-truths = np.loadtxt(f"truths/truth_{run}.csv", delimiter=",")
+flatchain = pandas.read_csv(f"flatchains/flatchain_{run}.csv", sep=",")#[var_names]
+truths = np.loadtxt(f"truths/truth_{run}.csv", delimiter=",")[:-1]
 
 # print(flatchain)
+
+matplotlib.rc('xtick', labelsize=13) 
+matplotlib.rc('ytick', labelsize=13) 
+matplotlib.rcParams.update({'font.size': 16})
 
 emcee_plot = corner.corner(flatchain, 
                            labels=labels, 
@@ -44,5 +49,5 @@ emcee_plot = corner.corner(flatchain,
 # corner.overplot_lines(emcee_plot, SM_truth, color = 'C1')
 corner.overplot_points(emcee_plot, SM_points, marker = '*', color = 'orangered')
 
-plt.savefig("paramind_with_BRinv.svg")
+plt.savefig("paramind_without_BRinv.svg")
 plt.show()
