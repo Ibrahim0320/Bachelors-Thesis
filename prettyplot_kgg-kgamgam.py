@@ -2,6 +2,7 @@ import pandas
 import numpy as np
 import matplotlib.pyplot as plt
 import corner
+import matplotlib
 
 run = "2023-03-21_2105"
 
@@ -21,6 +22,10 @@ flatchain = pandas.read_csv(f"flatchains/flatchain_{run}.csv", sep=",")[var_name
 truths = np.loadtxt(f"truths/truth_{run}.csv", delimiter=",")
 
 # print(flatchain)
+
+matplotlib.rc('xtick', labelsize=12) 
+matplotlib.rc('ytick', labelsize=12) 
+matplotlib.rcParams.update({'font.size': 14})
 
 emcee_plot = corner.corner(flatchain, 
                            labels=labels, 
