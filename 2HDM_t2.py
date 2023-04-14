@@ -101,8 +101,8 @@ def residue_VBF(params):
     #k_zgam = params['k_zgam']
     BR_inv = params['BR_inv']
 
-    k_VBF_78 = 0.74*k_w**2 + 0.74*k_z**2
-    k_VBF_13 = 0.73*k_w**2 + 0.27*k_z**2
+    k_VBF_78 = 0.74*k_w**2 + 0.26*k_z**2
+    k_VBF_13 = k_VBF_78
     k_gg = 0.01 *k_b**2 - 0.16*k_b*k_gg + 1.93*k_gg**2 - 0.12*k_t*k_b + 2.93*k_gg*k_t + 1.11*k_t**2
 
     sum_over_f = (k_w**2 * br['WW']

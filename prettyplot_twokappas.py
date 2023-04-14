@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import corner
 import matplotlib
 
-run = "2023-03-21_2122"
+run = "2023-04-14_1428"
 
 # var_names = ['k_v','k_b','k_t','k_mu','k_tau','k_gg','k_gamgam', 'BR_inv']
 # var_names = ['k_w','k_z','k_b','k_t','k_mu','k_tau','k_gg','k_gamgam']

@@ -17,8 +17,8 @@ def residue(params):
     return np.hstack((res_ggF, res_ttH, res_VBF, res_VH))
 
 def residue_ggF(params):
-    k_w = params['k_v']
-    k_z = params['k_v']
+    k_w = params['k_w']
+    k_z = params['k_z']
     k_t = params['k_t']
     k_b = params['k_b']
     k_mu = params['k_mu']
@@ -82,8 +82,8 @@ def residue_ggF(params):
     return np.hstack((res_WW_78, res_ZZ_78, res_bb_78, res_mumu_78, res_tau_78, res_gamgam_78,res_WW_13, res_ZZ_13, res_bb_13, res_mumu_13, res_tau_13, res_gamgam_13, res_gg_13, res_gg_78))
 
 def residue_VBF(params):
-    k_w = params['k_v']
-    k_z = params['k_v']
+    k_w = params['k_w']
+    k_z = params['k_z']
     k_t = params['k_t']
     k_b = params['k_b']
     k_mu = params['k_mu']
@@ -93,8 +93,8 @@ def residue_VBF(params):
     #k_zgam = params['k_zgam']
     BR_inv = params['BR_inv']
 
-    k_VBF_78 = 0.74*k_w**2 + 0.74*k_z**2
-    k_VBF_13 = 0.73*k_w**2 + 0.27*k_z**2
+    k_VBF_78 = 0.74*k_w**2 + 0.26*k_z**2
+    k_VBF_13 = k_VBF_78
     k_gg = 0.01 *k_b**2 - 0.16*k_b*k_gg + 1.93*k_gg**2 - 0.12*k_t*k_b + 2.93*k_gg*k_t + 1.11*k_t**2
 
     sum_over_f = (k_w**2 * br['WW']
@@ -142,8 +142,8 @@ def residue_VBF(params):
     return np.hstack((res_WW_78, res_ZZ_78, res_bb_78, res_mumu_78, res_tau_78, res_gamgam_78, res_WW_13, res_ZZ_13, res_bb_13, res_mumu_13, res_tau_13, res_gamgam_13,res_gg_78, res_gg_13))
 
 def residue_ttH(params):
-    k_w = params['k_v']
-    k_z = params['k_v']
+    k_w = params['k_w']
+    k_z = params['k_z']
     k_t = params['k_t']
     k_b = params['k_b']
     k_mu = params['k_mu']
@@ -186,8 +186,8 @@ def residue_ttH(params):
     return np.hstack((res_WW, res_ZZ, res_bb, res_mumu, res_tau, res_gamgam, res_gg))
 
 def residue_VH(params):
-    k_w = params['k_v']
-    k_z = params['k_v']
+    k_w = params['k_w']
+    k_z = params['k_z']
     k_t = params['k_t']
     k_b = params['k_b']
     k_mu = params['k_mu']
@@ -232,12 +232,13 @@ def residue_VH(params):
 
 # Skapa parametrar
 par = lmfit.Parameters()
-par.add('k_v', value = 1, min = -1, max = 1,vary=False)
-par.add('k_b', value = 1, min = -5, max = 5,vary=False)
-par.add('k_t', value = 1, min = -5, max = 5,vary=False)
+par.add('k_w', value = 1, min = -5, max = 5,vary=True)
+par.add('k_z', value = 1, min = -5, max = 5,vary=True)
+par.add('k_b', value = 1, min = -5, max = 5,vary=True)
+par.add('k_t', value = 1, min = -5, max = 5,vary=True)
 # par.add('k_c', value = 1, min = -5, max = 5) # är lika med k_t
-par.add('k_mu', value = 1, min = -5, max = 5,vary=False)
-par.add('k_tau', value = 1, min = -5, max = 5,vary=False)
+par.add('k_mu', value = 1, min = -5, max = 5,vary=True)
+par.add('k_tau', value = 1, min = -5, max = 5,vary=True)
 par.add('k_gg', value = 0)
 par.add('k_gamgam', value = 0)
 #par.add('k_zgam', value = 1, min = -5, max = 5)
@@ -252,7 +253,7 @@ lmfit.report_fit(out)
 
 print(f"PID: {os.getpid()}")
 print("Sampling the posterior...")
-bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=500, steps=15000, thin=60, params=out.params, is_weighted=True, progress=True)
+bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=2000, steps=50000, thin=100, params=out.params, is_weighted=True, progress=True)
 print("Sampling done. Saving...")
 bay.flatchain.to_csv(f'flatchains/flatchain_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.csv', sep=',')
 np.savetxt(f'truths/truth_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.csv', list(out.params.valuesdict().values()),delimiter=',')

@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import corner
 import matplotlib
 
-run = "2023-03-21_2105"
+run = "2023-04-14_1504"
 
 # var_names = ['k_v','k_b','k_t','k_mu','k_tau','k_gg','k_gamgam', 'BR_inv']
 # var_names = ['k_w','k_z','k_b','k_t','k_mu','k_tau','k_gg','k_gamgam']
@@ -32,7 +32,7 @@ emcee_plot = corner.corner(flatchain,
                            levels = (0.68,0.95,), 
                            bins=50, 
                            smooth=True, 
-                           truths=truths[5:7], 
+                           truths=truths[2:4], 
                            verbose=True, 
                            plot_datapoints=False, 
                            quantiles=(0.025,0.975), 
