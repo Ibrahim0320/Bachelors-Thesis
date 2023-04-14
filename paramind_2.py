@@ -17,8 +17,8 @@ def residue(params):
     return np.hstack((res_ggF, res_ttH, res_VBF, res_VH))
 
 def residue_ggF(params):
-    k_w = params['k_w']
-    k_z = params['k_z']
+    k_w = params['k_v']
+    k_z = params['k_v']
     k_t = params['k_t']
     k_b = params['k_b']
     k_mu = params['k_mu']
@@ -82,8 +82,8 @@ def residue_ggF(params):
     return np.hstack((res_WW_78, res_ZZ_78, res_bb_78, res_mumu_78, res_tau_78, res_gamgam_78,res_WW_13, res_ZZ_13, res_bb_13, res_mumu_13, res_tau_13, res_gamgam_13, res_gg_13, res_gg_78))
 
 def residue_VBF(params):
-    k_w = params['k_w']
-    k_z = params['k_z']
+    k_w = params['k_v']
+    k_z = params['k_v']
     k_t = params['k_t']
     k_b = params['k_b']
     k_mu = params['k_mu']
@@ -142,8 +142,8 @@ def residue_VBF(params):
     return np.hstack((res_WW_78, res_ZZ_78, res_bb_78, res_mumu_78, res_tau_78, res_gamgam_78, res_WW_13, res_ZZ_13, res_bb_13, res_mumu_13, res_tau_13, res_gamgam_13,res_gg_78, res_gg_13))
 
 def residue_ttH(params):
-    k_w = params['k_w']
-    k_z = params['k_z']
+    k_w = params['k_v']
+    k_z = params['k_v']
     k_t = params['k_t']
     k_b = params['k_b']
     k_mu = params['k_mu']
@@ -186,8 +186,8 @@ def residue_ttH(params):
     return np.hstack((res_WW, res_ZZ, res_bb, res_mumu, res_tau, res_gamgam, res_gg))
 
 def residue_VH(params):
-    k_w = params['k_w']
-    k_z = params['k_z']
+    k_w = params['k_v']
+    k_z = params['k_v']
     k_t = params['k_t']
     k_b = params['k_b']
     k_mu = params['k_mu']
@@ -232,8 +232,8 @@ def residue_VH(params):
 
 # Skapa parametrar
 par = lmfit.Parameters()
-par.add('k_w', value = 1, min = -5, max = 5,vary=True)
-par.add('k_z', value = 1, min = -5, max = 5,vary=True)
+par.add('k_v', value = 1, min = -1, max = 1,vary=True)
+# par.add('k_z', value = 1, min = -5, max = 5,vary=True)
 par.add('k_b', value = 1, min = -5, max = 5,vary=True)
 par.add('k_t', value = 1, min = -5, max = 5,vary=True)
 # par.add('k_c', value = 1, min = -5, max = 5) # är lika med k_t
@@ -242,7 +242,7 @@ par.add('k_tau', value = 1, min = -5, max = 5,vary=True)
 par.add('k_gg', value = 0)
 par.add('k_gamgam', value = 0)
 #par.add('k_zgam', value = 1, min = -5, max = 5)
-par.add('BR_inv', value = 0, min = 0, max = 0.5, vary=False)
+par.add('BR_inv', value = 0, min = 0, max = 0.5, vary=True)
 
 print('Finding best fit parameters...')
 # MinimizerResult objekt
