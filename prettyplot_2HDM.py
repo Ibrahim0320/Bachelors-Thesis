@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import corner
 import matplotlib
 
-run = "2023-03-24_2104"
+run = "2023-04-15_0709"
 
 var_names = ['tanB','cosBA','k_gamgam']
 
@@ -25,7 +25,7 @@ matplotlib.rcParams.update({'font.size': 16})
 
 emcee_plot = corner.corner(flatchain[flatchain.columns[::-1]], 
                            labels=labels[::-1], 
-                           levels = (0.69,0.95,), 
+                           levels = (0.69,0.95,0.99), 
                            bins=30, 
                            smooth=True, 
                            verbose=True, 

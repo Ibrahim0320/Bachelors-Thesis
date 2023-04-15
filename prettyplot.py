@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import corner
 import matplotlib
 
-run = "2023-03-08_1756"
+run = "2023-04-15_0239"
 
 # var_names = ['k_v','k_b','k_t','k_mu','k_tau','k_gg','k_gamgam', 'BR_inv']
 var_names = ['k_w','k_z','k_b','k_t','k_mu','k_tau','k_gg','k_gamgam']
@@ -22,10 +22,10 @@ labels = [
     r"$\kappa_{\tau}$",
     r"$\kappa_{gg}$",
     r"$\kappa_{\gamma \gamma}$",
-    # r"$BR_{inv}$",
+    # r"$BR_{osynlig}$",
 ]
 
-flatchain = pandas.read_csv(f"flatchains/flatchain_{run}.csv", sep=",")#[var_names]
+flatchain = pandas.read_csv(f"flatchains/flatchain_{run}.csv", sep=",")[var_names]
 truths = np.loadtxt(f"truths/truth_{run}.csv", delimiter=",")[:-1]
 
 # print(flatchain)
@@ -49,5 +49,5 @@ emcee_plot = corner.corner(flatchain,
 # corner.overplot_lines(emcee_plot, SM_truth, color = 'C1')
 corner.overplot_points(emcee_plot, SM_points, marker = '*', color = 'orangered')
 
-plt.savefig("paramind_without_BRinv.svg")
+plt.savefig("paramind_without_BRinv_2.svg")
 plt.show()
