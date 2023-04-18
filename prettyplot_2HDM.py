@@ -25,11 +25,12 @@ matplotlib.rcParams.update({'font.size': 16})
 
 emcee_plot = corner.corner(flatchain[flatchain.columns[::-1]], 
                            labels=labels[::-1], 
-                           levels = (0.69,0.95,0.99,0.99999), 
+                           levels = (0.69,0.95), 
                            bins=30, 
                            smooth=True, 
                            verbose=True, 
                            plot_datapoints=True, 
+                           range=[1,0.995,1]
                         #    range=[(-0.1,0.1), (-2,2)]
                         #    quantiles=(0.16, 0.84), 
                         #    show_titles=True
