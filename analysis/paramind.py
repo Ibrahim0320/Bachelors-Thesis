@@ -17,7 +17,7 @@ def residue(params):
     return np.hstack((res_ggF, res_ttH, res_VBF, res_VH))
 
 def residue_ggF(params):
-    k_w = params['k_v']
+    k_w = params['k_v'] # import params from dict
     k_z = params['k_v']
     k_t = params['k_t']
     k_b = params['k_b']
@@ -33,7 +33,7 @@ def residue_ggF(params):
     k_ggF_13 = k_gg
     k_ggF_7 = k_gg
 
-    sum_over_f = (k_w**2 * br['WW']
+    sum_over_f = (k_w**2 * br['WW'] # define sum in denominator
                   + k_z**2 * br['ZZ'] 
                   + k_b**2 *br['bb'] 
                   + k_t**2 * br['cc'] 
@@ -43,6 +43,7 @@ def residue_ggF(params):
                   + k_gg * br['gg']
     )
 
+    # define mu_model for every decay channel
     mu_model_WW_78 = (k_z**2 * k_ggF_7 * (1 - BR_inv)) / sum_over_f
     mu_model_ZZ_78 = (k_w**2 * k_ggF_7 * (1 - BR_inv)) / sum_over_f
     mu_model_bb_78 = (k_b**2 * k_ggF_7 * (1 - BR_inv)) / sum_over_f 
@@ -59,6 +60,7 @@ def residue_ggF(params):
     mu_model_gamgam_13 = (k_gamgam * k_ggF_13 * (1 - BR_inv)) / sum_over_f
     mu_model_gg_13 = (k_gg * k_ggF_13 * (1 - BR_inv)) / sum_over_f
 
+    # residues for every decay channel
     res_WW_78 = (hd('mu','ggF','WW','78') - mu_model_WW_78)/hd('unc','ggF','WW','78')
     res_ZZ_78 = (hd('mu','ggF','ZZ','78') - mu_model_ZZ_78)/hd('unc','ggF','ZZ','78')
     res_bb_78 = (hd('mu','ggF','bb','78') - mu_model_bb_78)/hd('unc','ggF','bb','78')
@@ -229,7 +231,7 @@ def residue_VH(params):
     return np.hstack((res_WW, res_ZZ, res_bb, res_mumu, res_tau, res_gamgam,res_gg))
 
 
-# Skapa parametrar
+# Define parameters
 par = lmfit.Parameters()
 par.add('k_v', value = 1, min = -1, max = 1,vary=True)
 # par.add('k_z', value = 1, min = -5, max = 5,vary=True)
@@ -243,16 +245,19 @@ par.add('k_gamgam', value = 0)
 #par.add('k_zgam', value = 1, min = -5, max = 5)
 par.add('BR_inv', value = 0, min = 0, max = 0.5, vary=True)
 
+# minimise using nelder
 print('Finding best fit parameters...')
-# MinimizerResult objekt
 out = lmfit.minimize(residue, par, method = 'nelder', nan_policy= 'omit')
 
 # write error report
 lmfit.report_fit(out)
 
+# sample the posterior distribution using emcee
 print(f"PID: {os.getpid()}")
 print("Sampling the posterior...")
 bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=2000, steps=50000, thin=100, params=out.params, is_weighted=True, progress=True)
+
+# saving truths, flatchains and plots
 print("Sampling done. Saving...")
 bay.flatchain.to_csv(f'flatchains/flatchain_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.csv', sep=',')
 np.savetxt(f'truths/truth_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.csv', list(out.params.valuesdict().values()),delimiter=',')
