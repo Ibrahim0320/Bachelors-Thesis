@@ -13,13 +13,12 @@ def residue(params):
     res_VBF = residue_VBF(params)
     res_ttH = residue_ttH(params)
     res_VH = residue_VH(params)
-    res_BR = residue_BR(params)
 
-    return np.hstack((res_ggF, res_ttH, res_VBF, res_VH, res_BR))
+    return np.hstack((res_ggF, res_ttH, res_VBF, res_VH))
 
 def residue_ggF(params):
-    k_w = params['k_w']
-    k_z = params['k_z']
+    k_w = params['k_v']
+    k_z = params['k_v']
     k_t = params['k_t']
     k_b = params['k_b']
     k_mu = params['k_mu']
@@ -28,28 +27,28 @@ def residue_ggF(params):
     k_gamgam = params['k_gamgam']
     #k_zgam = params['k_zgam']
     BR_inv = params['BR_inv']
+
+    k_gg = 0.01 *k_b**2 - 0.16*k_b*k_gg + 1.93*k_gg**2 - 0.12*k_t*k_b + 2.93*k_gg*k_t + 1.11*k_t**2
+    k_gamgam = 1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2
+    k_ggF_13 = k_gg
+    k_ggF_7 = k_gg
+
     sum_over_f = (k_w**2 * br['WW']
                   + k_z**2 * br['ZZ'] 
                   + k_b**2 *br['bb'] 
                   + k_t**2 * br['cc'] 
                   + k_mu**2 * br['mumu'] 
                   + k_tau**2 * br['tt'] 
-                  + (1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * br['gamgam']
-                  + (0.01 *k_b**2 - 0.16*k_b*k_gg + 1.93*k_gg**2 - 0.12*k_t*k_b + 2.93*k_gg*k_t + 1.11*k_t**2 ) * br['gg']
+                  + k_gamgam * br['gamgam']
+                  + k_gg * br['gg']
     )
-    
-    # k_ggF_7 = 1.06 * k_t**2 + 0.01 * k_b**2 - 0.07 * k_t * k_b
-    # k_ggF_13 = 1.04*k_t**2 + 0.002*k_b**2 - 0.04*k_t*k_b
-    k_gg = 0.01 *k_b**2 - 0.16*k_b*k_gg + 1.93*k_gg**2 - 0.12*k_t*k_b + 2.93*k_gg*k_t + 1.11*k_t**2
-    k_ggF_13 = k_gg
-    k_ggF_7 = k_gg
 
     mu_model_WW_78 = (k_z**2 * k_ggF_7 * (1 - BR_inv)) / sum_over_f
     mu_model_ZZ_78 = (k_w**2 * k_ggF_7 * (1 - BR_inv)) / sum_over_f
     mu_model_bb_78 = (k_b**2 * k_ggF_7 * (1 - BR_inv)) / sum_over_f 
     mu_model_mumu_78 = (k_mu**2 * k_ggF_7 * (1 - BR_inv)) / sum_over_f
     mu_model_tau_78 = (k_tau**2 * k_ggF_7 * (1 - BR_inv)) / sum_over_f
-    mu_model_gamgam_78 = ((1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * k_ggF_7 * (1 - BR_inv)) / sum_over_f
+    mu_model_gamgam_78 = (k_gamgam * k_ggF_7 * (1 - BR_inv)) / sum_over_f
     mu_model_gg_78 = (k_gg * k_ggF_7 * (1 - BR_inv)) / sum_over_f
 
     mu_model_WW_13 = (k_z**2 * k_ggF_13 * (1 - BR_inv)) / sum_over_f
@@ -57,7 +56,7 @@ def residue_ggF(params):
     mu_model_bb_13 = (k_b**2 * k_ggF_13 * (1 - BR_inv)) / sum_over_f
     mu_model_mumu_13 = (k_mu**2 * k_ggF_13 * (1 - BR_inv)) / sum_over_f
     mu_model_tau_13 = (k_tau**2 * k_ggF_13 * (1 - BR_inv)) / sum_over_f
-    mu_model_gamgam_13 = ((1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * k_ggF_13 * (1 - BR_inv)) / sum_over_f
+    mu_model_gamgam_13 = (k_gamgam * k_ggF_13 * (1 - BR_inv)) / sum_over_f
     mu_model_gg_13 = (k_gg * k_ggF_13 * (1 - BR_inv)) / sum_over_f
 
     res_WW_78 = (hd('mu','ggF','WW','78') - mu_model_WW_78)/hd('unc','ggF','WW','78')
@@ -80,8 +79,8 @@ def residue_ggF(params):
     return np.hstack((res_WW_78, res_ZZ_78, res_bb_78, res_mumu_78, res_tau_78, res_gamgam_78,res_WW_13, res_ZZ_13, res_bb_13, res_mumu_13, res_tau_13, res_gamgam_13, res_gg_13, res_gg_78))
 
 def residue_VBF(params):
-    k_w = params['k_w']
-    k_z = params['k_z']
+    k_w = params['k_v']
+    k_z = params['k_v']
     k_t = params['k_t']
     k_b = params['k_b']
     k_mu = params['k_mu']
@@ -91,9 +90,10 @@ def residue_VBF(params):
     #k_zgam = params['k_zgam']
     BR_inv = params['BR_inv']
 
-    k_VBF_78 = 0.74*k_w**2 + 0.74*k_z**2
-    k_VBF_13 = 0.73*k_w**2 + 0.27*k_z**2
+    k_VBF_78 = 0.74*k_w**2 + 0.26*k_z**2
+    k_VBF_13 = k_VBF_78
     k_gg = 0.01 *k_b**2 - 0.16*k_b*k_gg + 1.93*k_gg**2 - 0.12*k_t*k_b + 2.93*k_gg*k_t + 1.11*k_t**2
+    k_gamgam = 1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2
 
     sum_over_f = (k_w**2 * br['WW']
                   + k_z**2 * br['ZZ'] 
@@ -101,7 +101,7 @@ def residue_VBF(params):
                   + k_t**2 * br['cc'] 
                   + k_mu**2 * br['mumu'] 
                   + k_tau**2 * br['tt'] 
-                  + (1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * br['gamgam']
+                  + k_gamgam * br['gamgam']
                   + k_gg * br['gg']
     )
     
@@ -110,7 +110,7 @@ def residue_VBF(params):
     mu_model_bb_78 = (k_b**2 * k_VBF_78 * (1 - BR_inv)) / sum_over_f 
     mu_model_mumu_78 = (k_mu**2 * k_VBF_78 * (1 - BR_inv)) / sum_over_f
     mu_model_tau_78 = (k_tau**2 * k_VBF_78 * (1 - BR_inv)) / sum_over_f
-    mu_model_gamgam_78 = ((1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * k_VBF_78 * (1 - BR_inv)) / sum_over_f
+    mu_model_gamgam_78 = (k_gamgam * k_VBF_78 * (1 - BR_inv)) / sum_over_f
     mu_model_gg_78 = (k_gg * k_VBF_78 * (1 - BR_inv)) / sum_over_f
 
     mu_model_WW_13 = (k_z**2 * k_VBF_13 * (1 - BR_inv)) / sum_over_f
@@ -118,7 +118,7 @@ def residue_VBF(params):
     mu_model_bb_13 = (k_b**2 * k_VBF_13 * (1 - BR_inv)) / sum_over_f
     mu_model_mumu_13 = (k_mu**2 * k_VBF_13 * (1 - BR_inv)) / sum_over_f
     mu_model_tau_13 = (k_tau**2 * k_VBF_13 * (1 - BR_inv)) / sum_over_f
-    mu_model_gamgam_13 = ((1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * k_VBF_13 * (1 - BR_inv)) / sum_over_f
+    mu_model_gamgam_13 = (k_gamgam * k_VBF_13 * (1 - BR_inv)) / sum_over_f
     mu_model_gg_13 = (k_gg * k_VBF_13 * (1 - BR_inv)) / sum_over_f
 
     res_WW_78 = (hd('mu','VBF','WW','78') - mu_model_WW_78)/hd('unc','VBF','WW','78')
@@ -140,8 +140,8 @@ def residue_VBF(params):
     return np.hstack((res_WW_78, res_ZZ_78, res_bb_78, res_mumu_78, res_tau_78, res_gamgam_78, res_WW_13, res_ZZ_13, res_bb_13, res_mumu_13, res_tau_13, res_gamgam_13,res_gg_78, res_gg_13))
 
 def residue_ttH(params):
-    k_w = params['k_w']
-    k_z = params['k_z']
+    k_w = params['k_v']
+    k_z = params['k_v']
     k_t = params['k_t']
     k_b = params['k_b']
     k_mu = params['k_mu']
@@ -152,6 +152,7 @@ def residue_ttH(params):
     BR_inv = params['BR_inv']
 
     k_gg = 0.01 *k_b**2 - 0.16*k_b*k_gg + 1.93*k_gg**2 - 0.12*k_t*k_b + 2.93*k_gg*k_t + 1.11*k_t**2
+    k_gamgam = 1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2
 
     sum_over_f = (k_w**2 * br['WW']
                   + k_z**2 * br['ZZ'] 
@@ -159,7 +160,7 @@ def residue_ttH(params):
                   + k_t**2 * br['cc'] 
                   + k_mu**2 * br['mumu'] 
                   + k_tau**2 * br['tt'] 
-                  + (1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * br['gamgam']
+                  + k_gamgam * br['gamgam']
                   + k_gg * br['gg']
     )
     
@@ -168,7 +169,7 @@ def residue_ttH(params):
     mu_model_bb = (k_b**2 * k_t**2 * (1 - BR_inv)) / sum_over_f
     mu_model_mumu = (k_mu**2 * k_t**2 * (1 - BR_inv)) / sum_over_f
     mu_model_tau = (k_tau**2 * k_t**2 * (1 - BR_inv)) / sum_over_f
-    mu_model_gamgam = ((1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * k_t**2 * (1 - BR_inv)) / sum_over_f
+    mu_model_gamgam = (k_gamgam * k_t**2 * (1 - BR_inv)) / sum_over_f
     mu_model_gg = (k_gg * k_t**2 * (1 - BR_inv)) / sum_over_f
     
 
@@ -184,8 +185,8 @@ def residue_ttH(params):
     return np.hstack((res_WW, res_ZZ, res_bb, res_mumu, res_tau, res_gamgam, res_gg))
 
 def residue_VH(params):
-    k_w = params['k_w']
-    k_z = params['k_z']
+    k_w = params['k_v']
+    k_z = params['k_v']
     k_t = params['k_t']
     k_b = params['k_b']
     k_mu = params['k_mu']
@@ -197,6 +198,7 @@ def residue_VH(params):
 
     k_VH = 0.5*k_z**2 + 0.5*k_w**2
     k_gg = 0.01 *k_b**2 - 0.16*k_b*k_gg + 1.93*k_gg**2 - 0.12*k_t*k_b + 2.93*k_gg*k_t + 1.11*k_t**2
+    k_gamgam = 1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2
 
     sum_over_f = (k_w**2 * br['WW']
                   + k_z**2 * br['ZZ'] 
@@ -204,7 +206,7 @@ def residue_VH(params):
                   + k_t**2 * br['cc'] 
                   + k_mu**2 * br['mumu'] 
                   + k_tau**2 * br['tt'] 
-                  + (1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * br['gamgam']
+                  + k_gamgam * br['gamgam']
                   + k_gg * br['gg']
     )
     
@@ -213,9 +215,8 @@ def residue_VH(params):
     mu_model_bb = (k_b**2 * k_VH * (1 - BR_inv)) / sum_over_f
     mu_model_mumu = (k_mu**2 *k_VH * (1 - BR_inv)) / sum_over_f
     mu_model_tau = (k_tau**2 * k_VH * (1 - BR_inv)) / sum_over_f
-    mu_model_gamgam = ((1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * k_VH * (1 - BR_inv)) / sum_over_f
+    mu_model_gamgam = (k_gamgam * k_VH * (1 - BR_inv)) / sum_over_f
     mu_model_gg = (k_gg * k_VH * (1 - BR_inv)) / sum_over_f
-    # mu_model_gamgam = (k_gamgam**2 * k_VH * (1 - BR_inv)) / sum_over_f
 
     res_WW = (hd('mu','VH','WW') - mu_model_WW)/hd('unc','VH','WW')
     res_ZZ = (hd('mu','VH','ZZ') - mu_model_ZZ)/hd('unc','VH','ZZ')
@@ -227,46 +228,18 @@ def residue_VH(params):
 
     return np.hstack((res_WW, res_ZZ, res_bb, res_mumu, res_tau, res_gamgam,res_gg))
 
-def residue_BR(params):
-    k_w = params['k_w']
-    k_z = params['k_z']
-    k_t = params['k_t']
-    k_b = params['k_b']
-    k_mu = params['k_mu']
-    k_tau = params['k_tau']
-    k_gg = params['k_gg']
-    k_gamgam = params['k_gamgam']
-    #k_zgam = params['k_zgam']
-    BR_inv = params['BR_inv']
-
-    k_VH = 0.5*k_z**2 + 0.5*k_w**2
-    k_gg = 0.01 *k_b**2 - 0.16*k_b*k_gg + 1.93*k_gg**2 - 0.12*k_t*k_b + 2.93*k_gg*k_t + 1.11*k_t**2
-
-    sum_over_f = (k_w**2 * br['WW']
-                  + k_z**2 * br['ZZ'] 
-                  + k_b**2 *br['bb'] 
-                  + k_t**2 * br['cc'] 
-                  + k_mu**2 * br['mumu'] 
-                  + k_tau**2 * br['tt'] 
-                  + (1.58*k_w**2 - 0.67*k_t*k_w + 0.07*k_t**2 + 0.01*k_b*k_w+0.16*k_t*k_gamgam - 0.76*k_w*k_gamgam + 0.09*k_gamgam**2) * br['gamgam']
-                  + k_gg * br['gg']
-    )
-
-    gam_model = sum_over_f/(1-BR_inv)
-
-    return (0.775-gam_model)/(0.68) # (data-model)/unc
 
 # Skapa parametrar
 par = lmfit.Parameters()
-par.add('k_w', value = 1, min = -5, max = 5)
-par.add('k_z', value = 1, min = -5, max = 5)
-par.add('k_b', value = 1, min = -5, max = 5)
-par.add('k_t', value = 1, min = -5, max = 5)
+par.add('k_v', value = 1, min = -1, max = 1,vary=True)
+# par.add('k_z', value = 1, min = -5, max = 5,vary=True)
+par.add('k_b', value = 1, min = -5, max = 5,vary=True)
+par.add('k_t', value = 1, min = -5, max = 5,vary=True)
 # par.add('k_c', value = 1, min = -5, max = 5) # är lika med k_t
-par.add('k_mu', value = 1, min = -5, max = 5)
-par.add('k_tau', value = 1, min = -5, max = 5)
-par.add('k_gg', value = 0, min = -5, max = 5)
-par.add('k_gamgam', value = 0, min = -5, max = 5)
+par.add('k_mu', value = 1, min = -5, max = 5,vary=True)
+par.add('k_tau', value = 1, min = -5, max = 5,vary=True)
+par.add('k_gg', value = 0)
+par.add('k_gamgam', value = 0)
 #par.add('k_zgam', value = 1, min = -5, max = 5)
 par.add('BR_inv', value = 0, min = 0, max = 0.5, vary=True)
 
@@ -279,12 +252,12 @@ lmfit.report_fit(out)
 
 print(f"PID: {os.getpid()}")
 print("Sampling the posterior...")
-bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=2000, steps=50000, thin=200, params=out.params, is_weighted=True, progress=True)
+bay = lmfit.minimize(residue, method='emcee',float_behavior = 'chi2', burn=2000, steps=50000, thin=100, params=out.params, is_weighted=True, progress=True)
 print("Sampling done. Saving...")
 bay.flatchain.to_csv(f'flatchains/flatchain_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.csv', sep=',')
 np.savetxt(f'truths/truth_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.csv', list(out.params.valuesdict().values()),delimiter=',')
 
-emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values())) # med br_inv
+emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values())[5:-1]) # med br_inv
 # emcee_plot = corner.corner(bay.flatchain, labels=bay.var_names, levels = (0.69,),truths=list(out.params.valuesdict().values())[:-1]) # utan br_inv
 plt.savefig(f'plots/corner_{datetime.datetime.now().strftime("%Y-%m-%d_%H%M")}.svg')
 print("I'm done here. Goodbye!")

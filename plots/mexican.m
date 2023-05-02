@@ -13,9 +13,9 @@ s = surf(x,y,z, 'FaceAlpha',0.5, 'FaceLighting','gouraud');
 s.EdgeAlpha = 0.5;
 cmap = colormap(gcf);
 colormap(flipud(cmap));
-xlabel('Re(\phi)', 'FontSize',14);
-ylabel('Im(\phi)','FontSize',14);
-zlabel('V(\phi)','FontSize',14);
+xlabel('\phi_1', 'FontSize',20, 'HorizontalAlignment','center');
+ylabel('\phi_2','FontSize',20, 'HorizontalAlignment','center');
+zlabel('V(\phi)','FontSize',16);
 set(gca,'xtick',[])
 set(gca,'ytick',[])
 set(gca,'ztick',[]) 
