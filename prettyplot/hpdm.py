@@ -28,14 +28,16 @@ A,Mforbidden = np.meshgrid(a,mforbidden)
 F = gamma_ss(M,A)/(gammatot + gamma_ss(M,A))
 G = gamma_DD(M,A)/(gammatot + gamma_DD(M,A))
 H = gamma_VV(M,A)/(gammatot + gamma_VV(M,A))
+J = M**2-(10**A)*(v**2)/2
 vectorcolor = 'lightsteelblue'
 scalarcolor = 'lightcoral'
 fermioncolor = 'lightgreen'
 
 plt.contourf(Mforbidden,A,np.zeros((100,100)),[0,1],colors='orangered',alpha=0.5, hatches='X')
-plt.contourf(M,A,H,[brinv,np.infty],colors=vectorcolor, hatches='o')
-plt.contourf(M,A,F,[brinv,np.infty],colors=scalarcolor, hatches='*')
-plt.contourf(M,A,G,[brinv,np.infty],colors=fermioncolor, hatches='s')
+plt.contourf(M,A,G,[0,brinv],colors=fermioncolor)
+plt.contourf(M,A,F,[0,brinv],colors=scalarcolor)
+plt.contourf(M,A,H,[0,brinv],colors=vectorcolor)
+plt.contour(M,A,J,[0])
 plt.xlim(0,125)
 plt.xlabel(r"$m_{DM}$ [GeV]")
 plt.ylabel(r"$\log(\lambda)$")
