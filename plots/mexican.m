@@ -9,6 +9,8 @@ z = f(R);
 
 [x,y] = pol2cart(T,R);
 hold on
+
+
 s = surf(x,y,z, 'FaceAlpha',0.5, 'FaceLighting','gouraud');
 s.EdgeAlpha = 0.5;
 cmap = colormap(gcf);
@@ -19,6 +21,9 @@ zlabel('V(\phi)','FontSize',16);
 set(gca,'xtick',[])
 set(gca,'ytick',[])
 set(gca,'ztick',[]) 
+ax = gca;
+ax.XAxisLocation = 'origin'; ax.YAxisLocation = 'origin';
+
 
 radius = 0.6;
 [X,Y,Z] = sphere;

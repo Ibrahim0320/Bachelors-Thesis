@@ -9,8 +9,8 @@ run = "2023-04-15_0055"
 var_names = ['k_v','k_b','k_t','k_mu','k_tau','k_gg','k_gamgam', 'BR_inv']
 # var_names = ['k_w','k_z','k_b','k_t','k_mu','k_tau','k_gg','k_gamgam']
 
-# SM_truth = [1, 1, 1, 1, 1, 0, 0, 0]
-SM_truth = [1, 1, 1, 1, 1, 1, 0, 0]
+SM_truth = [1, 1, 1, 1, 1, 0, 0, 0]
+# SM_truth = [1, 1, 1, 1, 1, 1, 0, 0]
 SM_points = np.array([SM_truth, SM_truth])
 labels = [
     r"$\kappa_v$",
@@ -25,8 +25,8 @@ labels = [
     r"$BR_{osynlig}$",
 ]
 
-flatchain = pandas.read_csv(f"flatchains/flatchain_{run}.csv", sep=",")[var_names]
-truths = np.loadtxt(f"truths/truth_{run}.csv", delimiter=",")#[:-1]
+flatchain = pandas.read_csv(f"../flatchains/flatchain_{run}.csv", sep=",")[var_names]
+truths = np.loadtxt(f"../truths/truth_{run}.csv", delimiter=",")#[:-1]
 
 # print(flatchain)
 
